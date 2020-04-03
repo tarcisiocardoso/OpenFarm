@@ -1,0 +1,51 @@
+[
+    {
+       "id":"artigoTecnico",
+       "tl":"Artigo Tecnico",
+       "dc":"Informe conteudo tecnico que possa ser util >>>>A SER DEFINIDO<<<<",
+       "categoria":[
+          {
+             "id":"agricultura",
+             "tl":"Assuntos relacionados ao cultivo de plantas",
+             "dc":"Informaões uteis de cultivares, variedades, região, o que deve ser feito para ter a maxima produtividade, etc"
+          },
+          {
+             "id":"pecuarea",
+             "tl":"Assunto relacionado a criação de animais",
+             "dc":"lalalalala"
+          }
+       ]
+    },
+    {
+       "id":"blog",
+       "tl":"Blog e opiniões diversas",
+       "dc":"BBBBBB",
+       "categoria":[
+          {
+             "id":"atividade",
+             "tl":"Atividade que queira compartilhar",
+             "dc":"lblblblblblbl"
+          },
+          {
+             "id":"geral",
+             "tl":"Conhecimento geral que queira compartilhar",
+             "dc":"lclclclclcl"
+          }
+       ]
+    },
+    {
+       "id":"info",
+       "tl":"Publicação informativa",
+       "dc":"aaaaaa",
+       "categoria":[
+          {
+             "id":"acontecimento",
+             "tl":"O que esta acontecendo na sua região e entorno"
+          },
+          {
+             "id":"geral",
+             "tl":"Assuntos diversos"
+          }
+       ]
+    }
+ ]

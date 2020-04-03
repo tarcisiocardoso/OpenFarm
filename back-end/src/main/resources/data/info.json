@@ -1,0 +1,6 @@
+{
+    "cadGastoFixo":{
+       "titulo":"Gastos fixos da fazeda",
+       "descricao":"Coloque aqui gastos fixos que possuem periodos conhecidos e não estejam ligados a alguma produção.<br/>Tambem é interessante colocar gastos de pequenas produções que não visam lucro financeiro e que não queira um maior controle produtivo como exemplo galinha e porco caipira, pomar, hobby, etc."
+    }
+ }
