@@ -6,7 +6,7 @@ import java.util.Optional;
 import br.com.farm.adm.model.User;
 
 public interface IUserService {
-    void create(User o);
+    User create(User o);
     Optional<User> findById(String id);
     User findByLogin(String login);
     List<User> findAll();

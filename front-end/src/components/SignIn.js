@@ -93,7 +93,7 @@ export default function SignIn(props) {
             console.log("You're successfully logged in!");
             // setOpen(false);
             props.onChange(false);
-            history.push("/wellcome");
+            // history.push("/home");
             window.location.reload(); 
             
         }).catch(error => {

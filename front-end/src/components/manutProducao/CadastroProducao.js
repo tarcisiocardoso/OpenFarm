@@ -86,9 +86,8 @@ export default function CadastroProducao(props) {
 
     useEffect(() => {
         console.log('>>>userEffect producao<<<' );
-        console.log( Object.entries( props.match.params).length );
         if( !producao.id ){
-            if( Object.entries( props.match.params).length > 0){
+            if( props && props.match && Object.entries( props.match.params).length > 0){
                 fetch('/api/producao/'+props.match.params.id)
                 .then(response => response.json())
                 .then(data => setProducao(data))

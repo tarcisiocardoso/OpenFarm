@@ -1,0 +1,13 @@
+{
+    "_id" : ObjectId("5e810a1035b7ed78a980fa7d"),
+    "name" : "fazendeiro",
+    "email" : "f@g.com",
+    "login" : "farm",
+    "emailVerified" : false,
+    "password" : "123",
+    "provider" : "local",
+    "perfis" : [ 
+        "fazenda"
+    ],
+    "_class" : "br.com.farm.adm.model.User"
+}

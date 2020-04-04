@@ -1,0 +1,95 @@
+{
+    "_id" : ObjectId("5e81099035b7ed78a980fa7c"),
+    "identificacao" : {
+        "nome" : "Sitio Fartura",
+        "tamanho" : 25,
+        "cep" : "12345",
+        "endereco" : "XXX Cruzeiro DF, apto xxx",
+        "cidade" : "Brasilia",
+        "estado" : "Distrito Federal",
+        "uf" : "",
+        "telefone" : "",
+        "email" : "t@g.com",
+        "responsavel" : "tac",
+        "chuva" : 1400,
+        "temperatura" : 23,
+        "estiagemInicio" : 5,
+        "estiagemFim" : 10
+    },
+    "proprietarios" : [ 
+        "5e776922b41aae5cc7ed84a6"
+    ],
+    "gastos" : [ 
+        {
+            "nome" : "Pagamento de funcionario",
+            "valor" : 1100.0,
+            "tipo" : "Mensal",
+            "descricao" : "Funcionários CLTs que cumprem atividade de 8 horas."
+        }, 
+        {
+            "nome" : "Sexta basica",
+            "valor" : 300.5,
+            "tipo" : "Mensal",
+            "descricao" : "Compra de alimento para o pessoal e produto de limpesa"
+        }
+    ],
+    "matrizClima" : {
+        "tMedia" : [ 
+            23, 
+            23, 
+            22, 
+            21, 
+            20, 
+            19, 
+            21, 
+            22, 
+            23, 
+            22, 
+            22, 
+            22
+        ],
+        "tMinima" : [ 
+            18, 
+            18, 
+            17, 
+            15, 
+            13, 
+            13, 
+            14, 
+            16, 
+            17, 
+            18, 
+            18, 
+            16
+        ],
+        "tMaxima" : [ 
+            27, 
+            28, 
+            28, 
+            27, 
+            26, 
+            26, 
+            28, 
+            29, 
+            28, 
+            27, 
+            27, 
+            27
+        ],
+        "chuva" : [ 
+            262, 
+            202, 
+            188, 
+            107, 
+            26, 
+            4, 
+            7, 
+            6, 
+            35, 
+            140, 
+            207, 
+            281
+        ]
+    },
+    "_class" : "br.com.farm.adm.model.Fazenda"
+}
