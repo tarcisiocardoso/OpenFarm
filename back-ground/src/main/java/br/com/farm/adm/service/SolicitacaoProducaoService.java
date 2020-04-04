@@ -91,16 +91,17 @@ public class SolicitacaoProducaoService {
     
     private String montaConteudoNovaProducao(UserProduction prod) {
     	StringBuilder sb = new StringBuilder();
-    	sb.append("<h3>Produção concluida</h3>")
+    	sb.append("<h3>Acompanhe sua producão</h3>")
     	.append("<p>Todas as produções podem ser acompanhada no <a href='/dashboard'>Painel de controle do usuario</a> ou diretamente ")
     	.append("<a href='/dashboard/").append(prod.nomeProducao).append("'>na produção criada (").append(prod.nomeProducao).append(")</a></p>");
     	
     	//TODO definir regra das informações complementares
     	if( true == true) {
-    		sb.append("<h5>Informações complementares</h5>")
-    		.append("<p>O sistema inferiou algumas informações que pode não esta de acordo com sua produção, seria intressante entrar <a href='/prod/piquete'>na definição dos piquetes</a>")
-    		.append(" para uma melhor adequação a realidade e informar como esta o <a href='/prod/volumoso'>complemento com volumoso</a>");
-    	}
+    		sb.append("<h4>Informações complementares</h4>")
+    		.append("<p>O sistema inferiou algumas informações que pode não esta de acordo com sua produção, seria intressante entrar <a href='/prod/"+prod.nomeProducao+"/piquete'>na definição dos piquetes</a>")
+    		.append(" para uma melhor adequação a realidade e informar como esta o <a href='/prod/"+prod.nomeProducao+"/volumoso'>complemento com volumoso</a> fornecido aos aniamis.</p>");
+		}
+		sb.append("<p>Para ter uma informação mais precisa informe o valor <a href='/prod/"+prod.nomeProducao+"/producao'>médio da comercialização na sua região</a></p>.");
     	sb.append("<br/><br/><br/><p>Assim que possivel siga as orientações sugeridas e acompanhe a produção ao logo dos dias para receber informações importate.</p>");
     	
 		return sb.toString();
