@@ -13,6 +13,8 @@ import CadastroProducao from './components/manutProducao/CadastroProducao';
 import FazendaMain from './components/fazenda/FazendaMain';
 import ProducaoWizard from './components/user/producao/ProducaoWizard';
 import VerPost from './components/post/VerPost';
+import PainelControle from './components/user/PainelControle';
+import Producao from './components/prod/Producao';
 
 
 import {
@@ -51,6 +53,8 @@ function App() {
           <Route path="/wizardProducao"><ProducaoWizard/> </Route>
           <Route path="/post/:id" render={(props)=> <VerPost {...props} />} />
           
+          <Route path="/dashboard"><PainelControle/></Route>
+          <Route path="/prod"><Producao/></Route>
           {/* <React path="/blog"> <BlogEditor/> </React> */}
 
           <Route component={NotFound}></Route> 

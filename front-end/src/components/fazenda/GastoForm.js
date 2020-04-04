@@ -17,7 +17,6 @@ const useStyles = makeStyles(theme => ({
 
 function GastoForm(props) {
     const {addGasto} = props;
-    const classes = useStyles();
     const [gasto, setGasto] = React.useState({
         nome: '',
         tipo: 'Mensal',

@@ -2,16 +2,7 @@ import React from 'react';
 import {Line} from 'react-chartjs-2';
 import { makeStyles, Container } from '@material-ui/core';
 
-const useStyles = makeStyles({
-    table: {
-      minWidth: 650,
-      width: '100%',
-      font: 12,
-    },
-  });
-
 export default function ChuvaChart(props) {
-    const classes = useStyles();
 
     const {meses, matriz} = props;
     const data = {
