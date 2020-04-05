@@ -101,7 +101,7 @@ public class SolicitacaoProducaoService {
     		.append("<p>O sistema inferiou algumas informações que pode não esta de acordo com sua produção, seria intressante entrar <a href='/prod/"+prod.nomeProducao+"/piquete?id="+prod.id+"'>na definição dos piquetes</a>")
     		.append(" para uma melhor adequação a realidade e informar como esta o <a href='/prod/"+prod.nomeProducao+"/volumoso?id="+prod.id+"'>complemento com volumoso</a> fornecido aos aniamis.</p>");
 		}
-		sb.append("<p>Para ter uma informação mais precisa informe o valor <a href='/prod/"+prod.nomeProducao+"/producao?id="+prod.id+"'>médio da comercialização na sua região</a></p>.");
+		sb.append("<p>Para ter uma informação mais precisa informe o <a href='/prod/"+prod.nomeProducao+"/producao?id="+prod.id+"'>valor médio da comercialização na sua região</a></p>.");
     	sb.append("<br/><br/><br/><p>Assim que possivel siga as orientações sugeridas e acompanhe a produção ao logo dos dias para receber informações importate.</p>");
     	
 		return sb.toString();
