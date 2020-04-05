@@ -9,7 +9,7 @@ import Alert from '@material-ui/lab/Alert';
 import PiquetePanel from './PiquetePanel';
 import CadastroProducaoPanel from './CadastroProducaoPanel';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             flexGrow: 1,
