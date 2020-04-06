@@ -15,11 +15,6 @@ export default function InfoDialog(props) {
     const [scroll, setScroll] = React.useState('paper');
     const renderHTML = require('react-render-html');
 
-    const handleClickOpen = (scrollType) => () => {
-        setOpen(true);
-        setScroll(scrollType);
-    };
-
     const handleClose = () => {
         setOpen(false);
     };
