@@ -33,23 +33,73 @@ function VolumosoPanel(props) {
     const ref = useRef(null);
     const {producao} = props;
     const [producaoConsumoAnual, setProducaoConsumoAnual] = useState();
+    const [infoMsg, setInfoMsg] = useState();
+    const [alertMsg, setAlertaMsg] = useState();
+    const [label, setLabel] = useState();
 
     useEffect(() => {
         console.log("--->VolumosoPanel--<", producao);
 
-        // let pastoMS = producao.dados.pasto.ProducaoMS;
-        // let area = producao.dados.producao.areaProducaoEmHE;
-        // let qtdAdulto = producao.dados.producao.qtdAdulto;
-        // let pesoPedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
-
-        // let producaoTotal = ((pastoMS[0]+pastoMS[1])/2) * area;
-
-        // let consumo = (qtdAdulto * pesoPedio) * 0.03;// 3%
-
-        // setProducaoConsumoAnual( [producaoTotal, consumo] );
-
+        let piquete = producao.dados.pasto.piquetes;
+        let producaoTotal=0;
+        let consumo =0;
+        if( piquete && piquete > 2){
+           calculoComPiquete(); 
+        }else{
+           calculoComUA();
+        }
+        
     }, [producao]);
 
+    function calculoComPiquete(){
+        let pastoMS = producao.dados.pasto.producaoMS;
+        let area = producao.dados.producao.areaProducaoEmHE;
+        let qtdAdulto = producao.dados.producao.qtdAdulto;
+        let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+
+        let producaoTotal = pastoMS[0];
+        // TODO erificar piquetes
+        producaoTotal = producaoTotal * area;
+
+        let consumoDiario = ((qtdAdulto * pesoMedio) * 0.03);//1000;// 3%
+        let consumo = (consumoDiario * 365)/1000;//consumo anual em tonelada
+
+        setProducaoConsumoAnual( [consumo, producaoTotal] );
+        setLabel(['Consumo', 'Produção']);
+        
+        let dif = producaoTotal - consumo;
+        if( dif > 0){
+            let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+            let consumoBaseAno = (pesoMedio * 0.03)*360/1000;
+            let qtd = dif / consumoBaseAno;
+            setInfoMsg("Sua produção supera o consumo em "+ parseInt(dif)+" tonelada ha/ano podendo ter um acrescimo de animais adulto em "+parseInt(qtd)+" cabeças.");
+            setAlertaMsg();
+        }else{
+            setAlertaMsg("Sua produção não supre a necessidade de volumos dos animais adulto, sendo necessario um complemento de "+ parseInt(Math.abs( dif) )+" tonelada ha/ano em silo, feno, silagem ou capineira");
+            setInfoMsg();
+        }
+    }
+    function calculoComUA(){
+        let UA = producao.dados.consumo.UA;
+        let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+        let qtdAdulto = producao.dados.producao.qtdAdulto;
+        let area = producao.dados.producao.areaProducaoEmHE;
+
+        let suporte = (UA /pesoMedio) * area; 
+
+        console.log( suporte );
+        setLabel(['Capacidade', 'Quantidad de adulto']);
+        setProducaoConsumoAnual( [suporte, qtdAdulto] );
+
+        let dif = parseInt( suporte - qtdAdulto);
+        if( dif > 0 ){
+            setInfoMsg("A taxa de lotação animais tendo uma UA com "+UA+" kg permite um acrescimo de "+dif+" animais");
+            setAlertaMsg();
+        }else{
+            setInfoMsg();
+            setAlertaMsg("Taxa de lotação animal considerando uma UA com "+UA+" ultrapaça o limite em "+ Math.abs( dif)+" animais adultos.");
+        }
+    }
     return (
         <Container maxWidth="xl" className={classes.root} >
             <Grid container spacing={3}>
@@ -58,13 +108,20 @@ function VolumosoPanel(props) {
                         Fornecimento de Volumoso
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                <Alert severity="info">
-                    Em média o consumo de volumoso é 3% do peso vivo do animal e o fornecimento em geral consiste em pasto, silo, feno e capineira.
-                </Alert>
-                </Grid>
+                { alertMsg &&
+                    <Grid item xs={12}>
+                        <Alert severity="warning"> {alertMsg} </Alert>
+                    </Grid>
+                }
+                { infoMsg && 
+                    <Grid item xs={12}>
+                    <Alert severity="info">
+                        {infoMsg}
+                    </Alert>
+                    </Grid>
+                }
                 <Grid item xs={4}>
-                    <ChartPieProduto labels={['Consumo', 'Produção']} dados={[10,12]} titulo={'Consumo vs Produção'}/>
+                    <ChartPieProduto labels={label} dados={producaoConsumoAnual} titulo={'Consumo vs Produção em Toneladas'}/>
                 </Grid>
                 <Grid item xs={8}>
 
