@@ -38,6 +38,10 @@ export default function FormMinhaConta() {
         colaborador: false,
         adm: false
     });
+    //atualiza a pagina 
+    function refreshPage(){
+        window.location.reload();
+    }
 
     let [profile] = useCurrentUser();
 
@@ -136,7 +140,7 @@ export default function FormMinhaConta() {
                         </FormControl>
                         <FormControl fullWidth >
                             <InputLabel htmlFor="login">Login</InputLabel>
-                            <Input name="login" aria-describedby="login-helper-text" error onChange={handleChange} value={ user.login||''}/>
+                            <Input name="login" aria-describedby="login-helper-text" onChange={handleChange} value={ user.login||''}/>
                             <FormHelperText id="login-helper-text">Nome que gostaria de ser chamado</FormHelperText>
                         </FormControl>
                         <FormControl fullWidth >
@@ -156,31 +160,31 @@ export default function FormMinhaConta() {
                                 <FormControlLabel
                                     control={                            
                                         // if( user && user.perfis && user.perfis.find(element => element == 'fazenda') )
-                                        <Checkbox id="fazenda" onChange={handleChangePerfil} value={state.fazenda}/>
+                                        <Checkbox id="fazenda" checked="false" onChange={handleChangePerfil} value={state.fazenda}/>
                                     }
                                     label="Adiministrador fazenda"
                                 />
                                 <FormControlLabel
                                     control={                            
-                                        <Checkbox id="estudante" onChange={handleChangePerfil} value={state.estudante}/>
+                                        <Checkbox id="estudante" checked="false" onChange={handleChangePerfil} value={state.estudante}/>
                                     }
                                     label="Estudante e Hobista"
                                 />
                                 <FormControlLabel
                                     control={                            
-                                        <Checkbox id="tecnico" onChange={handleChangePerfil} value={state.tecnico}/>
+                                        <Checkbox id="tecnico" checked="false" onChange={handleChangePerfil} value={state.tecnico}/>
                                     }
                                     label="Tecnico e especialista"
                                 />
                                 <FormControlLabel
                                     control={                            
-                                        <Checkbox id="colaborador" onChange={handleChangePerfil} value={state.colaborador}/>
+                                        <Checkbox id="colaborador" checked="false" onChange={handleChangePerfil} value={state.colaborador}/>
                                     }
                                     label="Colaborador"
                                 />
                                 <FormControlLabel
                                     control={                            
-                                        <Checkbox id="adm" onChange={handleChangePerfil} value={state.adm}/>
+                                        <Checkbox id="adm" checked="false" onChange={handleChangePerfil} value={state.adm}/>
                                     }
                                     label="Adiministrador do sistema"
                                 />
@@ -194,7 +198,7 @@ export default function FormMinhaConta() {
                         <Button variant="outlined" color="primary" onClick={handleSubmit} type="submit">
                             Ok
                         </Button>
-                        <Button variant="outlined" color="secondary">
+                        <Button variant="outlined" color="secondary" onClick={refreshPage}>
                             cancelar
                         </Button>
                     </Grid>
