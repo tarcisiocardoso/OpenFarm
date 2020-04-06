@@ -5,7 +5,7 @@ import { useLocation, Redirect } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import { Paper, Grid, Typography, Backdrop, CircularProgress } from '@material-ui/core';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       flexGrow: 1,

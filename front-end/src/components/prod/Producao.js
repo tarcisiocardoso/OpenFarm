@@ -8,6 +8,7 @@ import { useCurrentUser } from "../../server/UseCurrentUser";
 import Alert from '@material-ui/lab/Alert';
 import PiquetePanel from './PiquetePanel';
 import CadastroProducaoPanel from './CadastroProducaoPanel';
+import VolumosoPanel from './VolumosoPanel';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -78,9 +79,12 @@ function Producao() {
                 }
                 {
                     hasProducao() && 
-                        <CadastroProducaoPanel producao={producao} />
+                        <CadastroProducaoPanel producao={producao} setProducao={setProducao} setError={setError}/>
                 }
-                
+                {
+                    hasVolumoso() && 
+                        <VolumosoPanel producao={producao} setProducao={setProducao} setError={setError}/>
+                }
                 { error && 
                     <Grid item xs={12}>
                         <Alert severity="error">{error}</Alert>
@@ -99,15 +103,18 @@ function Producao() {
     function hasPiquete(){
         if( wait) return false;
         if( !path ) return false;
-        console.log('>>>path<<<', path );
         return path.find(item => item.includes('piquete'));
     }
 
     function hasProducao(){
         if( wait) return false;
         if( !path ) return false;
-        console.log('>>>path<<<', path );
         return path.find(item => item.includes('producao'));
+    }
+    function hasVolumoso(){
+        if( wait) return false;
+        if( !path ) return false;
+        return path.find(item => item.includes('volumoso'));
     }
 
 }
