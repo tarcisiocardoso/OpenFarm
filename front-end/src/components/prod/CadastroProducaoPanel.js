@@ -301,7 +301,7 @@ function CadastroProducaoPanel(props) {
                         }
                     </Grid>
                     <Grid item xs={6}>
-                        <ChartPieProduto labels={menorMaiorLabel} dados={menorMaiorDado} titulo="Direfença dos gastos"/>
+                        <ChartPieProduto labels={menorMaiorLabel} dados={menorMaiorDado} titulo="Direfença dos valores"/>
                     </Grid>
                     <Grid item xs={6}>
                         <ChartBarProduto labels={labelValor} dados={valor} titulo="Produtos comercialisados"/>

@@ -34,8 +34,7 @@ export default function ConfirmarPanel(props) {
           Sistema de produção {producao.nome}
         </Typography>
         <Typography variant="body1" gutterBottom>
-            Sistema de produção assistida para criação de {producao.nome} será criada com uma área de pastejo de <b>{dado.area} hectare</b> com tota de <b>{dado.qtd} animais</b>  
-            adultos.
+            Sistema de produção assistida para criação de {producao.nome} será criada com uma área de pastejo de <b>{dado.area} hectare</b> com tota de <b>{dado.qtd} animais</b> adultos.
         </Typography>
         {dado.piquete && dado.piquete > 0 &&
             <Typography variant="body1" gutterBottom>
