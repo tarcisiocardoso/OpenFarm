@@ -8,6 +8,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Grid } from '@material-ui/core';
 import ChartPieProduto from '../../prod/ChartPieProduto';
 import ChartBarHorizontal from '../../prod/ChartBarHorizontal';
+import AlimentacaoTable from './AlimentacaoTable';
+import FormGastosPanel from '../../prod/FormGastosPanel';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -36,22 +38,22 @@ export default function PainelControleProducaoPanel(props) {
   const [animaisProduzido, setAnimaisProduzido] = useState(0);
   const [mortalidade, setMortalidade] = useState(0);
   const [custoProdutivo, setCustoProdutivo] = useState(0);
-  const [gastoRacao, setGastoRacao] = useState([]);
+  const [gastoAlimentacao, setGastoAlimentacao] = useState([]);
   const [barGasto, setBarGasto] = useState();
 
-  const {fazenda, producao} = props;
+  const {fazenda, producao, update} = props;
   
   useEffect(()=>{
-      console.log('>>>PainelControleProducaoPanel gastoRacao <<', gastoRacao);
+      console.log('>>>PainelControleProducaoPanel gastoAlimentacao <<', gastoAlimentacao);
       let arrL = [];
       let arrD = []
-      gastoRacao.forEach(item =>{
+      gastoAlimentacao.forEach(item =>{
         arrL.push(item.fase);
         arrD.push(item.gasto);
       })
 
       setBarGasto([arrL, arrD]);
-  }, [gastoRacao])
+  }, [gastoAlimentacao])
 
   useEffect(()=>{
     console.log('>>>PainelControleProducaoPanel<<');
@@ -89,18 +91,39 @@ export default function PainelControleProducaoPanel(props) {
       setCustoProdutivo(dados.gasto);
 
       console.log( ">>>>dados<<<<", dados)
-
   }
+  function atualicaCharts(prod){
+    dados = {};
+    update(prod);
+  }
+  
   function calculoCusto(){
-    let arrRacao = [];
+    let arrGasto = [];
+    let qtdGestacao = getOvelhasPrenhaPorAno();
+
     let pasto= (producao.dados.custoProdutivoUnitario.pasto.manutencao)*1000;
     pasto= pasto * producao.dados.producao.areaProducaoEmHE;
+    
+    arrGasto.push({
+      fase:'Pasto',
+      qtd: producao.dados.producao.areaProducaoEmHE,
+      tipo: 'hectare',
+      gasto: pasto
+    });
+
     //sal mineral
-    let sal = (producao.dados.consumo.salMineral[0]+producao.dados.consumo.salMineral[1])/2;
-    sal = (((sal/1000) * dados.qtdAnimais * DIA)/10) * ((producao.dados.custoProdutivoUnitario.salMineral[0]+producao.dados.custoProdutivoUnitario.salMineral[1])/2); 
+    let sal = ((producao.dados.consumo.salMineral[0]+producao.dados.consumo.salMineral[1])/2)/1000;
+    let sacoSal = parseInt(((sal * qtdGestacao * DIA)/10));
+    sal = sacoSal * ((producao.dados.custoProdutivoUnitario.salMineral[0]+producao.dados.custoProdutivoUnitario.salMineral[1])/2); 
     console.log( "========SAL=========", sal );
 
-    let racao = 0;
+    arrGasto.push({
+      fase:'Sal',
+      tipo: 'saco 10kg',
+      qtd: sacoSal,
+      gasto: sal
+    });
+    // let racao = 0;
     // let racao = (producao.dados.consumo.concentrado.normal[0] + producao.dados.consumo.concentrado.normal[0])/2;
     // racao = ((racao * dados.qtdAnimais * DIA) / 40) * producao.dados.custoProdutivoUnitario.racao.manutencao;
 
@@ -109,19 +132,30 @@ export default function PainelControleProducaoPanel(props) {
     let qtdRacaoComum = (producao.dados.consumo.concentrado.normal[0] + producao.dados.consumo.concentrado.normal[1])/2
     let vlRacaoManutencao = producao.dados.custoProdutivoUnitario.racao.manutencao;
 
-    let qtdGestacao = getOvelhasPrenhaPorAno();
+    
     let qtRacao = producao.dados.consumo.concentrado.gestacao?(producao.dados.consumo.concentrado.gestacao[0]+producao.dados.consumo.concentrado.gestacao[1])/2:qtdRacaoComum
     let custoRacaoGestacao = producao.dados.fases.gestacao * qtRacao* qtdGestacao;
     
     custoRacaoGestacao = (custoRacaoGestacao/ 40) * ( producao.dados.custoProdutivoUnitario.racao.gestacao?producao.dados.custoProdutivoUnitario.racao.gestacao:vlRacaoManutencao );
 
-    arrRacao.push({
-      fase:'Gestação: R$'+custoRacaoGestacao.toLocaleString('pt-br', {minimumFractionDigits: 2}),
+    arrGasto.push({
+      fase:'Gestação',
       qtd: qtdGestacao,
+      tipo: 'gestante/ano',
       gasto: custoRacaoGestacao
     })
-    racao = custoRacaoGestacao;
+    // racao = custoRacaoGestacao;
     console.log( qtdGestacao, qtRacao, custoRacaoGestacao );
+
+    qtRacao = producao.dados.consumo.concentrado.gestacao?(producao.dados.consumo.concentrado.lactacao[0]+producao.dados.consumo.concentrado.lactacao[1])/2:qtdRacaoComum
+    let custoLactacao = producao.dados.fases.lactacao * qtRacao * qtdGestacao;
+    custoLactacao = (custoLactacao/40) * ( producao.dados.custoProdutivoUnitario.racao.lactacao?producao.dados.custoProdutivoUnitario.racao.lactacao:vlRacaoManutencao );
+    arrGasto.push({
+      fase:'Lactação',
+      qtd: qtdGestacao,
+      tipo: 'lactante/'+producao.dados.fases.lactacao+" dias",
+      gasto: custoLactacao
+    })
 
     let prolificidade = (producao.dados.matriz.prolificidade[0]+producao.dados.matriz.prolificidade[1])/2;
 
@@ -131,12 +165,13 @@ export default function PainelControleProducaoPanel(props) {
         producao.dados.consumo.concentrado.filhotes?(producao.dados.consumo.concentrado.filhotes[0]+producao.dados.consumo.concentrado.filhotes[1])/2:qtdRacaoComum
       ))/40 * producao.dados.custoProdutivoUnitario.racao.greepfeed;
 
-    arrRacao.push({
-      fase: 'Greepfeed: R$'+greepfeed.toLocaleString('pt-br', {minimumFractionDigits: 2}),
+    arrGasto.push({
+      fase: 'Greepfeed',
       qtd:qtdFilhote,
+      tipo: "filhostes/"+producao.dados.fases.lactacao+" dias",
       gasto: greepfeed
     });
-    racao += greepfeed;
+    // racao += greepfeed;
 
     let acabamento = producao.dados.fases.acabamento?producao.dados.fases.acabamento:0;
     let precoce = (producao.dados.reprodutor.precoce[0] +producao.dados.reprodutor.precoce[1])/2;
@@ -145,26 +180,31 @@ export default function PainelControleProducaoPanel(props) {
     let faseRegria = Math.abs(producao.dados.fases.lactacao - precoce);
     if( faseRegria > 0 && faseRegria < acabamento ){
       let val = ((qtdFilhote * faseRegria * qtdRacaoComum)/40)*vlRacaoManutencao;
-      arrRacao.push({
-        fase: 'Recria: R$'+qtdFilhote.toLocaleString('pt-br', {minimumFractionDigits: 2}),
+      arrGasto.push({
+        fase: 'Recria',
         qtd: qtdFilhote,
+        tipo: 'crias/'+faseRegria+" dias",
         gasto: val
       });
-      racao += val;
+      // racao += val;
     }
     if (  acabamento > 0 ){
-      let val = ((qtdFilhote * acabamento * qtdRacaoComum)/40)* (
+      let borregos = qtdFilhote/2; //metade é femea
+      let val = ((borregos * acabamento * qtdRacaoComum)/40)* (
         producao.dados.custoProdutivoUnitario.racao.engorda?producao.dados.custoProdutivoUnitario.racao.engorda: vlRacaoManutencao);
-      arrRacao.push({
-        fase: 'Acabamento: R$'+val.toLocaleString('pt-br', {minimumFractionDigits: 2}),
+      arrGasto.push({
+        fase: 'Acabamento',
         qtd: qtdFilhote,
+        tipo: "borregos/"+borregos+" dias",
         gasto: val
       });
-      racao += val;
+      // racao += val;
     }
-    setGastoRacao(arrRacao);
-
-    return pasto+sal+racao;
+    setGastoAlimentacao(arrGasto);
+    let gasto = 0;
+    arrGasto.forEach(r => gasto+=r.gasto);
+    
+    return gasto;
   }
 
   function getOvelhasPrenhaPorAno(){
@@ -174,7 +214,7 @@ export default function PainelControleProducaoPanel(props) {
     let qtdGestacao = dados.qtdAnimais * intervaloEntreParto;
 
 
-    return qtdGestacao;
+    return parseInt(qtdGestacao);
   }
 
   return (
@@ -190,12 +230,14 @@ export default function PainelControleProducaoPanel(props) {
                 <ChartPieProduto 
                 titulo={'Resumo da produção'} 
                 labels={[
+                  ((lucroBruto-custoProdutivo)< 0) ?
+                  'Prejuizo: R$'+(lucroBruto-custoProdutivo).toLocaleString('pt-br', {minimumFractionDigits: 2}):
+                    'Lucro: R$'+(lucroBruto-custoProdutivo).toLocaleString('pt-br', {minimumFractionDigits: 2}),
                   'Bruto: R$'+lucroBruto.toLocaleString('pt-br', {minimumFractionDigits: 2}), 
-                  'Custo: R$'+custoProdutivo.toLocaleString('pt-br', {minimumFractionDigits: 2}), 
-                  'Lucro: R$'+(lucroBruto-custoProdutivo).toLocaleString('pt-br', {minimumFractionDigits: 2}) 
+                  'Custo: R$'+custoProdutivo.toLocaleString('pt-br', {minimumFractionDigits: 2})
                 ]} 
-                color={['green', 'red', 'blue']}
-                dados={[lucroBruto, custoProdutivo, lucroBruto-custoProdutivo]}
+                color={[((lucroBruto-custoProdutivo)< 0)?'red':'blue', 'green', 'DarkRed']}
+                dados={[lucroBruto-custoProdutivo, lucroBruto, custoProdutivo]}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -204,19 +246,26 @@ export default function PainelControleProducaoPanel(props) {
                     labels={barGasto[0]}
                     dados={barGasto[1]}
                     titulo='Gastos anuais'
-                    label='Ração'
+                    label='Alimentação'
+                    monetario={true}
                   />
                 }
               </Grid>
                 
             </Grid>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget
-            maximus est, id dignissim quam.
-          </Typography>
-        </ExpansionPanelDetails>
+        { producao &&
+          <ExpansionPanelDetails>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
+                <AlimentacaoTable arrAlimentacao={gastoAlimentacao} producao={producao}/>
+              </Grid>
+              <Grid item xs={6}>
+                <FormGastosPanel producao={producao} update={atualicaCharts} />
+              </Grid>
+            </Grid>
+          </ExpansionPanelDetails>
+        }
       </ExpansionPanel>
       <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
         <ExpansionPanelSummary

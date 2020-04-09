@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLocation, Redirect } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import { useCurrentUser } from "../../../server/UseCurrentUser";
-import { Paper, Grid, Typography, Backdrop, CircularProgress } from '@material-ui/core';
+import { Paper, Grid, Typography, Backdrop, CircularProgress, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import PainelControleProducaoPanel from './PainelControleProducaoPanel';
 
@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) =>
 function PainelControle() {
     const classes = useStyles();
     const [wait, setWait] = useState(true);
+    const [showSave, setShowSave] = useState(false);
     const location = useLocation();
     const [producao, setProducao] = useState();
     const [dashboardNome, setDashBoardNome] = useState();
@@ -39,7 +40,7 @@ function PainelControle() {
     const [profile, carregando] = useCurrentUser();
 
     useEffect(()=>{
-        if ( fazenda) setDashBoardNome(fazenda.identificacao.nome+" - "+producao.nomeProducao);
+        if ( fazenda) setDashBoardNome(fazenda.identificacao.nome+" - "+producao.nomeProducao+ " - "+producao.dados.producao.qtdAdulto+" matrizes");
     }, [fazenda]);
 
     useEffect(() => {
@@ -74,17 +75,32 @@ function PainelControle() {
         .catch(error => setError(error));
     }
 
+    function updateProducao(prod){
+        setProducao( prod );
+        setShowSave(true);
+    }
+    const handleSalva=(e)=>{
+        console.log('AINDA NÃO IMPLEMTADO');
+    }
+
     return (
 
         <Container maxWidth="xl" className={classes.root} >
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
+            <Grid container spacing={0}>
+                <Grid item xs={10}>
                     { dashboardNome && 
                         <Typography variant="h6" align='center'>{dashboardNome}</Typography>
                     }
                 </Grid>
+                <Grid item xs={2} align='right'>
+                    { showSave && 
+                        <Button variant="outlined" color="primary" onClick={handleSalva}>
+                            Salvar
+                        </Button>
+                    }
+                </Grid>
                 <Grid item xs={12}>
-                    <PainelControleProducaoPanel fazenda={fazenda} producao={producao} />
+                    <PainelControleProducaoPanel fazenda={fazenda} producao={producao} update={updateProducao}/>
                 </Grid>
             </Grid>
             <Backdrop className={classes.backdrop} open={wait || carregando} >
