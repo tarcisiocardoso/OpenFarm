@@ -225,11 +225,11 @@ export default function IdentificacaoPanel(props) {
                                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                                             Periodo de estiagem
                                         </Typography>
-                                        <Typography variant="h5" component="h2">
+                                        <Typography className={classes.title} variant="h5" component="h2" color="textSecondary">
                                                 <Input name="estiagemInicio"
                                                 value={fazenda.identificacao.estiagemInicio}
                                                 onChange={handleChange}
-                                                /> até 
+                                                /><span>até </span>
                                                 <Input name="estiagemFim" 
                                                 value={fazenda.identificacao.estiagemFim}
                                                 onChange={handleChange}

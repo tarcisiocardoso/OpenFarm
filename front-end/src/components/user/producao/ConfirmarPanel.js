@@ -38,12 +38,12 @@ export default function ConfirmarPanel(props) {
         </Typography>
         {dado.piquete && dado.piquete > 0 &&
             <Typography variant="body1" gutterBottom>
-                A área de pasto possue um sistema rotacionado com <b>{dado.piquetes} piquetes </b> distibuidos ao longo da propriedade permitindo 
+                A área de pasto possue um sistema rotacionado com <b>{dado.piquete} piquetes </b> distibuidos ao longo da propriedade permitindo 
                 com isso aumentar a taxa de lotação animal.
             </Typography>
         }
         {
-            (dado.suplemento.feno || dado.suplemento.silo || dado.suplemento.capineira) &&
+            (dado.suplemento && (dado.suplemento.feno || dado.suplemento.silo || dado.suplemento.capineira)) &&
             <Typography variant="body1" gutterBottom>
                 Tambem é fornecido aos animais <b>{montaSuplemento()}</b> como forma de complementar a alimentação.
             </Typography>
