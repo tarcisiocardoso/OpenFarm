@@ -63,6 +63,22 @@ function Producao() {
         }
     }, [producao]);
 
+    const salvaProducao=(prod)=>{
+        console.log(prod);
+
+        fetch('/api/userProduction', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(prod),
+            credentials: 'include'
+        }).then( response => response.json())
+        .then(data => setProducao ( data ) )
+        .catch( error => setError(error));
+    }
+
     return (
 
         <Container maxWidth="xl" className={classes.root} >
@@ -83,7 +99,7 @@ function Producao() {
                 }
                 {
                     hasVolumoso() && 
-                        <VolumosoPanel producao={producao} setProducao={setProducao} setError={setError}/>
+                        <VolumosoPanel producao={producao} setProducao={setProducao} salva={salvaProducao} />
                 }
                 { error && 
                     <Grid item xs={12}>

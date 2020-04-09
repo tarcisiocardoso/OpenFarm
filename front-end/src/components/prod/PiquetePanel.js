@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import { useLocation, Redirect } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { useLocation } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
-import { Paper, Grid, Typography, Backdrop, CircularProgress } from '@material-ui/core';
+import { Grid, Typography} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) =>
   createStyles({

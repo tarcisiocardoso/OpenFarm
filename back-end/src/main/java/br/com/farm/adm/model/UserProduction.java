@@ -17,6 +17,7 @@ public class UserProduction {
 
     public String idProducao;
     public String nomeProducao;
+    public String idFazenda;
 
     public Object dados; 
 

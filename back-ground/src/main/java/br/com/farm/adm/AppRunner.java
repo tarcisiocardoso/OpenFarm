@@ -1,7 +1,7 @@
 package br.com.farm.adm;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class AppRunner implements CommandLineRunner {
 
-  private static final Logger logger = LoggerFactory.getLogger(AppRunner.class);
+  // private static final Logger logger = LoggerFactory.getLogger(AppRunner.class);
 
   private final PostUserLookupService gitHubLookupService;
 
