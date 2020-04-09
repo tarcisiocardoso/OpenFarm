@@ -13,9 +13,8 @@ import CadastroProducao from './components/manutProducao/CadastroProducao';
 import FazendaMain from './components/fazenda/FazendaMain';
 import ProducaoWizard from './components/user/producao/ProducaoWizard';
 import VerPost from './components/post/VerPost';
-import PainelControle from './components/user/PainelControle';
+import PainelControle from './components/user/dashBoard/PainelControle';
 import Producao from './components/prod/Producao';
-
 
 import {
   BrowserRouter as Router,

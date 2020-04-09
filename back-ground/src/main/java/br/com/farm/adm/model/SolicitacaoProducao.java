@@ -14,6 +14,7 @@ public class SolicitacaoProducao{
     public Date data;
     public String tipo;
     public String idUser;
+    public String idFazenda;
     public String userAgent;
     public Entrada entrada;
 

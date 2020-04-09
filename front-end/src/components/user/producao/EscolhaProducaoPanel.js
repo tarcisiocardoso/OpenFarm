@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Paper, Select, MenuItem, FormControl, InputLabel, FormHelperText, Grid } from '@material-ui/core';
 import { CardHeader } from '@material-ui/core';
@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       maxWidth: '100%',
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function EscolhaProducaoPanel(props) {
   const classes = useStyles();
-  const { listaProducao, setDisable, producao, setProducao, fazenda, setFazenda, arrFarm } = props;
+  const { listaProducao, setDisable, producao, setProducao, fazenda, arrFarm } = props;
 
   const handleChange = (event) => {
     console.log('>>>>>>>>>>>>>>>>>>>>..handleChange<<<<<<<<<<<<<<<<<<<<<<,')

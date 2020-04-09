@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mongodb.util.JSON;
@@ -145,7 +144,8 @@ public class SolicitacaoProducaoService {
         }};
         prod.status=0;
         prod.idProducao = sp.entrada.producao.id;
-        prod.nomeProducao = sp.entrada.producao.nome;
+		prod.nomeProducao = sp.entrada.producao.nome;
+		prod.idFazenda = sp.idFazenda;
         
         JsonObject dados = new JsonObject();
         sp.entrada.producao.regras.forEach(p ->{

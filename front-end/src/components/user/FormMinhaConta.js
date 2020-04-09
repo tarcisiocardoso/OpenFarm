@@ -38,6 +38,10 @@ export default function FormMinhaConta() {
         colaborador: false,
         adm: false
     });
+    //atualiza a pagina 
+    function refreshPage(){
+        window.location.reload();
+    }
 
     let [profile] = useCurrentUser();
 
@@ -148,7 +152,7 @@ export default function FormMinhaConta() {
                         </FormControl>
                         <FormControl fullWidth >
                             <InputLabel htmlFor="login">Login</InputLabel>
-                            <Input name="login" aria-describedby="login-helper-text" error onChange={handleChange} value={ user.login||''}/>
+                            <Input name="login" aria-describedby="login-helper-text" onChange={handleChange} value={ user.login||''}/>
                             <FormHelperText id="login-helper-text">Nome que gostaria de ser chamado</FormHelperText>
                         </FormControl>
                         <FormControl fullWidth >
@@ -167,9 +171,8 @@ export default function FormMinhaConta() {
                             <FormGroup>
                                 <FormControlLabel
                                     control={                            
-                                    //    if( user && user.perfis && user.perfis.find(element => element == 'fazenda') )
-
-                                        <Checkbox id="fazenda" checked={state.fazenda} onChange={handleChangePerfil} value={state.fazenda}/>
+                                        // if( user && user.perfis && user.perfis.find(element => element == 'fazenda') )
+                                        <Checkbox id="fazenda" checked="false" onChange={handleChangePerfil} value={state.fazenda}/>
                                     }
                                     
                                     label="Adiministrador fazenda"

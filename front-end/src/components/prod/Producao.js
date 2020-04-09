@@ -8,6 +8,7 @@ import { useCurrentUser } from "../../server/UseCurrentUser";
 import Alert from '@material-ui/lab/Alert';
 import PiquetePanel from './PiquetePanel';
 import CadastroProducaoPanel from './CadastroProducaoPanel';
+import VolumosoPanel from './VolumosoPanel';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -62,6 +63,22 @@ function Producao() {
         }
     }, [producao]);
 
+    const salvaProducao=(prod)=>{
+        console.log(prod);
+
+        fetch('/api/userProduction', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(prod),
+            credentials: 'include'
+        }).then( response => response.json())
+        .then(data => setProducao ( data ) )
+        .catch( error => setError(error));
+    }
+
     return (
 
         <Container maxWidth="xl" className={classes.root} >
@@ -78,9 +95,12 @@ function Producao() {
                 }
                 {
                     hasProducao() && 
-                        <CadastroProducaoPanel producao={producao} />
+                        <CadastroProducaoPanel producao={producao} setProducao={setProducao} setError={setError}/>
                 }
-                
+                {
+                    hasVolumoso() && 
+                        <VolumosoPanel producao={producao} setProducao={setProducao} salva={salvaProducao} />
+                }
                 { error && 
                     <Grid item xs={12}>
                         <Alert severity="error">{error}</Alert>
@@ -99,15 +119,18 @@ function Producao() {
     function hasPiquete(){
         if( wait) return false;
         if( !path ) return false;
-        console.log('>>>path<<<', path );
         return path.find(item => item.includes('piquete'));
     }
 
     function hasProducao(){
         if( wait) return false;
         if( !path ) return false;
-        console.log('>>>path<<<', path );
         return path.find(item => item.includes('producao'));
+    }
+    function hasVolumoso(){
+        if( wait) return false;
+        if( !path ) return false;
+        return path.find(item => item.includes('volumoso'));
     }
 
 }

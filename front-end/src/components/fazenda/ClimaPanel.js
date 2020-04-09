@@ -48,7 +48,7 @@ const ExpansionPanelDetails = withStyles(theme => ({
   },
 }))(MuiExpansionPanelDetails);
 function montaMatriz(fazenda){
-
+  console.log('>>>montaMatriz<<<');
   let tMedia = [];
   let tMinima=[];
   let tMaxima=[];
@@ -97,20 +97,22 @@ export default function ClimaPanel(props) {
           <Typography>Dado climatológico {fazenda.identificacao.nome}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <ClimaTable  matriz={fazenda.matrizClima} updateMatriz={updateMatriz} meses={meses}/>
+            <ClimaTable  matriz={fazenda.matrizClima} updateMatriz={updateMatriz} meses={meses}/>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      <ExpansionPanel square expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-        <ExpansionPanelSummary aria-controls="panel2d-content" id="panel2d-header">
-          <Typography>Grafico distribuição da chuva ao longo dos meses</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <ChuvaChart meses={meses} matriz={fazenda.matrizClima} />
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+      { fazenda.matrizClima &&
+        <ExpansionPanel square expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+          <ExpansionPanelSummary aria-controls="panel2d-content" id="panel2d-header">
+            <Typography>Grafico distribuição da chuva ao longo dos meses</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+              <ChuvaChart meses={meses} matriz={fazenda.matrizClima} />
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      }
 
 
-
+{/* 
       <ExpansionPanel square expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
         <ExpansionPanelSummary aria-controls="panel3d-content" id="panel3d-header">
           <Typography>Collapsible Group Item #3</Typography>
@@ -122,7 +124,7 @@ export default function ClimaPanel(props) {
             elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
           </Typography>
         </ExpansionPanelDetails>
-      </ExpansionPanel>
+      </ExpansionPanel> */}
     </div>
   );
 }
