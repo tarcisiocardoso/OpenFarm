@@ -42,6 +42,7 @@ export default function FormMinhaConta() {
     let [profile] = useCurrentUser();
 
     useEffect(() => {
+        console.log('AAAAAAAAAA')
         console.log("profile", profile );
         if( profile ){
             if( profile.erro) return;
@@ -50,14 +51,16 @@ export default function FormMinhaConta() {
             user.login = profile.login;
             user.perfis = profile.perfis;
             if( user.perfis ){
-                user.perfis.forEach((val) => {
-                    state[val]=true;
-                    setState(state);
-                });
+                let s = {...state};
+                for(let x in user.perfis) {
+                    s[user.perfis[x]]=true;
+                }
+                console.log(s);
+                setState(s);
             }
             setUser(user);
         }
-      }, [profile, user, state] );
+      }, [profile] );
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -81,6 +84,7 @@ export default function FormMinhaConta() {
           });
           
     }
+    
 
     const handleChange = e => {
         // const target = event.target;
@@ -98,8 +102,12 @@ export default function FormMinhaConta() {
         setUser({...user, [e.target.name]: e.target.value} );
     };
     const handleChangePerfil = event => {
+
+        
         const target = event.target;
         const name = target.id;
+
+        console.log('Lucas bunitao', name)
         let u = {};
         for(let x in user){
             u[x] = user[x];
@@ -111,6 +119,10 @@ export default function FormMinhaConta() {
         }else {
             u.perfis.push(name);
         }
+
+        let st = {...state};
+        st[name] = !st[name]
+        setState( st );
         setUser(u);
     }
     
@@ -155,32 +167,34 @@ export default function FormMinhaConta() {
                             <FormGroup>
                                 <FormControlLabel
                                     control={                            
-                                        // if( user && user.perfis && user.perfis.find(element => element == 'fazenda') )
-                                        <Checkbox id="fazenda" onChange={handleChangePerfil} value={state.fazenda}/>
+                                    //    if( user && user.perfis && user.perfis.find(element => element == 'fazenda') )
+
+                                        <Checkbox id="fazenda" checked={state.fazenda} onChange={handleChangePerfil} value={state.fazenda}/>
                                     }
+                                    
                                     label="Adiministrador fazenda"
                                 />
                                 <FormControlLabel
                                     control={                            
-                                        <Checkbox id="estudante" onChange={handleChangePerfil} value={state.estudante}/>
+                                        <Checkbox id="estudante" checked={state.estudante} onChange={handleChangePerfil} value={state.estudante}/>
                                     }
                                     label="Estudante e Hobista"
                                 />
                                 <FormControlLabel
                                     control={                            
-                                        <Checkbox id="tecnico" onChange={handleChangePerfil} value={state.tecnico}/>
+                                        <Checkbox id="tecnico" checked={state.tecnico}  onChange={handleChangePerfil} value={state.tecnico}/>
                                     }
                                     label="Tecnico e especialista"
                                 />
                                 <FormControlLabel
                                     control={                            
-                                        <Checkbox id="colaborador" onChange={handleChangePerfil} value={state.colaborador}/>
+                                        <Checkbox id="colaborador" checked={state.colaborador} onChange={handleChangePerfil} value={state.colaborador}/>
                                     }
                                     label="Colaborador"
                                 />
                                 <FormControlLabel
                                     control={                            
-                                        <Checkbox id="adm" onChange={handleChangePerfil} value={state.adm}/>
+                                        <Checkbox id="adm" checked={state.adm} onChange={handleChangePerfil} value={state.adm}/>
                                     }
                                     label="Adiministrador do sistema"
                                 />
@@ -194,8 +208,8 @@ export default function FormMinhaConta() {
                         <Button variant="outlined" color="primary" onClick={handleSubmit} type="submit">
                             Ok
                         </Button>
-                        <Button variant="outlined" color="secondary">
-                            cancelar
+                        <Button href="/home" variant="outlined" color="secondary">   
+                            Sair
                         </Button>
                     </Grid>
                 </Grid>
