@@ -39,6 +39,10 @@ export default function ChartBarHorizontal(props) {
     }
   }
   const options = {
+    title: {
+      display: true,
+      text: {titulo}
+    },
     maintainAspectRatio: false,
     responsive: false,
     legend: {
@@ -66,7 +70,6 @@ export default function ChartBarHorizontal(props) {
 
   return (
     <div>
-      <h2>{titulo}</h2>
       <HorizontalBar 
       data={data} 
       options={monetario?optionsMonetario:options} 

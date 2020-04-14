@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) =>
   }),
 );
 
+let consumoVolumoso = 0.03;
+
 function VolumosoPanel(props) {
     const classes = useStyles();
     const location = useLocation();
@@ -87,6 +89,10 @@ function VolumosoPanel(props) {
         let area = producao.dados.producao.areaProducaoEmHE;
         let qtdAdulto = producao.dados.producao.qtdAdulto;
         let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+        
+        if( (producao.dados.reprodutor.precoce[0]+producao.dados.reprodutor.precoce[1])/2 >=9 ){
+            consumoVolumoso = 0.045;
+        }
 
         let producaoTotal = pastoMS[0];
         // TODO erificar piquetes
@@ -99,7 +105,7 @@ function VolumosoPanel(props) {
         }
         qtdAdulto -= (cpl.silo+cpl.feno);
 
-        let consumoDiario = ((qtdAdulto * pesoMedio) * 0.03);//1000;// 3%
+        let consumoDiario = ((qtdAdulto * pesoMedio) * consumoVolumoso);//1000;// 3%
         let consumo = (consumoDiario * 365)/1000;//consumo anual em tonelada
 
         setProducaoConsumoAnual( [consumo, producaoTotal] );
@@ -109,7 +115,7 @@ function VolumosoPanel(props) {
         let dif = producaoTotal - consumo;
         if( dif > 1){
             let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
-            let consumoBaseAno = (pesoMedio * 0.03)*360/1000;
+            let consumoBaseAno = (pesoMedio * consumoVolumoso)*360/1000;
             let qtd = dif / consumoBaseAno;
             setInfoMsg("Sua produção supera o consumo em "+ parseInt(dif)+" tonelada ha/ano podendo ter um acrescimo de animais adulto em "+parseInt(qtd)+" cabeças.");
             setAlertaMsg();
