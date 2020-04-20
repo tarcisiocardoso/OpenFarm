@@ -5,12 +5,13 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Grid } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
 import ChartPieProduto from '../../prod/ChartPieProduto';
 import ChartBarHorizontal from '../../prod/ChartBarHorizontal';
 import ChartCicloProdutivo from '../../prod/ChartCicloProdutivo';
 import AlimentacaoTable from './AlimentacaoTable';
 import FormGastosPanel from '../../prod/FormGastosPanel';
+import FormProducaoPanel from '../../prod/FormProducaoPanel';
 import NecessidadeCustoPanel from './NecessidadeCustoPanel';
 
 const useStyles = makeStyles((theme) =>
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) =>
 );
 const DIA = 365;
 let dados = {};
-
+const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 export default function PainelControleProducaoPanel(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
@@ -273,20 +274,20 @@ export default function PainelControleProducaoPanel(props) {
           aria-controls="panel2bh-content"
           id="panel2bh-header"
         >
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
               <ChartCicloProdutivo 
                 fazenda={fazenda}
                 producao={producao}
+                meses={meses}
               />
-            </Grid>
-          </Grid>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Typography>
-            Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar
-            diam eros in elit. Pellentesque convallis laoreet laoreet.
-          </Typography>
+          <Container fixed align='center'>
+            <FormProducaoPanel 
+              producao={producao}
+              update={atualicaCharts}
+              meses={meses}
+            />
+          </Container>
         </ExpansionPanelDetails>
       </ExpansionPanel>
       <ExpansionPanel expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>

@@ -155,7 +155,7 @@ function PainelControle() {
                         setShowConfirm={setShowConfirm}
                     />
                 </Route>
-                <Route path={match.path}>
+                <Route path={`${match.path}/:id`}>
                     <MainProducao 
                         producao={producao} 
                         updateProducao={updateProducao} 
@@ -163,7 +163,9 @@ function PainelControle() {
                         setShowConfirm={setShowConfirm}
                         showSave={showSave}
                     />
-                    
+                </Route>
+                <Route path={match.path}>
+                    <h1>Não implementado</h1>
                 </Route>
             </Switch>
 

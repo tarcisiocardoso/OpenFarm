@@ -19,6 +19,7 @@ export default function MainProducao(props){
         if ( fazenda) setDashBoardNome(fazenda.identificacao.nome+" - "+producao.nomeProducao+ " - "+producao.dados.producao.qtdAdulto+" matrizes");
     }, [fazenda]);
   
+
     const handleClick = (event) => {
         console.log('>>>handlClici<<<', event.currentTarget)
       setAnchorEl(event.currentTarget);
@@ -41,7 +42,10 @@ export default function MainProducao(props){
         console.log(producao);
         setShowConfirm(true);
     }
-
+    function update(prod){
+        setDashBoardNome(fazenda.identificacao.nome+" - "+prod.nomeProducao+ " - "+prod.dados.producao.qtdAdulto+" matrizes");
+        updateProducao(prod)
+    }
     return (
         <Grid container spacing={0}>
                 <Grid item xs={10}>
@@ -77,7 +81,7 @@ export default function MainProducao(props){
                     </Menu>
                 </Grid>
                 <Grid item xs={12}>
-                    <PainelControleProducaoPanel fazenda={fazenda} producao={producao} update={updateProducao}/>
+                    <PainelControleProducaoPanel fazenda={fazenda} producao={producao} update={update}/>
                 </Grid>
             </Grid>
     )
