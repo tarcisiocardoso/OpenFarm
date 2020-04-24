@@ -82,12 +82,12 @@ function Producao() {
     return (
 
         <Container maxWidth="xl" className={classes.root} >
-            <Grid container spacing={3}>
+            <Grid container spacing={1}>
                 {
                     hasPiquete() && 
                     <Grid item xs={12}>
                         <Paper>
-                            <Typography component="h1" variant="h5" align='center'>
+                            <Typography component="h1" variant="h5">
                                 <PiquetePanel producao={producao} />
                             </Typography>
                         </Paper>
