@@ -220,6 +220,11 @@ export default function Header(props) {
     // props.history.push("/about");
     if( !state.open ) handleMenuClose();
   }
+  const handlePerfil = () =>{
+    history.replace("/Perfil");
+    if( !state.open ) handleMenuClose();
+  }
+ 
 
   const handleLogout = () => {
     console.log('>>>handleLogout<<<');
@@ -270,6 +275,7 @@ export default function Header(props) {
         <div>
           <MenuItem onClick={handleLogin}>Login</MenuItem>
           <MenuItem onClick={handleCriarUmaConta}>Criar uma conta</MenuItem>
+          <MenuItem onClick={handlePerfil}>Perfil</MenuItem>
         </div>
       )
     }

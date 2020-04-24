@@ -15,6 +15,7 @@ import ProducaoWizard from './components/user/producao/ProducaoWizard';
 import VerPost from './components/post/VerPost';
 import PainelControle from './components/user/dashBoard/PainelControle';
 import Producao from './components/prod/Producao';
+import Perfil from './components/user/Perfil';
 
 import {
   BrowserRouter as Router,
@@ -41,6 +42,8 @@ function App() {
           <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route> 
           <Route path="/minhaConta"><FormMinhaConta/></Route>
           <Route path="/chart"> <ProfileList/></Route>
+          <Route path="/Perfil"><Perfil/></Route>
+          
           
           <Route path="/blog"><BlogEditor/></Route>
           <Route path="/manutProducao/nova"><CadastroProducao/></Route>
