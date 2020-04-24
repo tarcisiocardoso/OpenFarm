@@ -62,4 +62,22 @@ public class UserController {
         userRepository.insert(user);
     }
 
+    @PostMapping("/api/trocaSenha")
+    public void trocaSenha(@Valid @RequestBody User user){
+        System.out.println(">>>>LALALALA<<<<"+ user.getLogin()+user.getPassword());
+        System.out.println( user );
+
+
+        User obj = userRepository.findByLogin(user.getLogin());
+
+        obj.setPassword(user.getPassword());
+
+
+        obj.setPassword(passwordEncoder.encode(user.getPassword()));
+
+
+        System.out.println(">>>>>>>>>>>>>>>>2<<<<<<<<<<<<<<<<<<<<<<");
+        userRepository.save(obj);
+    }
+
 }

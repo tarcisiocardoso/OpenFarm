@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useCurrentUser } from "../../../server/UseCurrentUser";
 import TextField from '@material-ui/core/TextField';
 import { Button, Typography, Grid, Container, Paper, FormControl, FormHelperText } from '@material-ui/core';
+import { useHistory } from "react-router-dom";
+
+
+// /home/cardoso/Documentos/mateus/OpenFarm/front-end/src/server/UseCurrentUser.js
+
+
 //import { login } from '../../../util/APIUtils';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function BasicTextFields() {
+
+    let [user] = useCurrentUser();
+
     const classes = useStyles();
     const [novaSenha, setNovaSenha] = useState("");
     const [confirSenha, setConfirSenha] = useState("");
@@ -22,20 +32,13 @@ export default function BasicTextFields() {
         ok: true,
         msg: ""
     });
-
-
-
-    //     function TrocarSenha() {
-
-    //         console.log('Mano agora arruma esse bagui ai')
-
-    //    }
+    const history = useHistory();
     const handleBtnClick = () => {
-
-        console.log('Mano agora arruma esse bagui ai ++++', novaSenha, "++++", confirSenha)
+        console.log('Mano agora arruma esse bagui ai ++++', novaSenha, "++++", confirSenha, user)
         // let senha = 
         // let nome = document.getElementsByName("senha").value;
         // console.log('Senha=' + this.nome)
+
 
         if (isSenhaValidada()) {
             //TODO enviar pro servidor
@@ -44,6 +47,12 @@ export default function BasicTextFields() {
                 msg: ""
 
             })
+
+
+            submit();
+
+
+
         } else {
             setError({
                 hasErro: true,
@@ -55,20 +64,26 @@ export default function BasicTextFields() {
     }
 
     function submit(){
-        // fetch('/api/formMinhaConta' + ((user.id) ? '/' + user.id.toString() : ''), {
-        //     method: (user.id) ? 'PUT' : 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(user),
-        //     credentials: 'include'
-        // }).then(response => {
-        //     console.log(response);
-        //     history.push('/home');
-        // }).catch(error => {
-        //     console.log(">>ERRO<<", error);
-        // });
+
+        let item = {
+            login: user.login, 
+            password: novaSenha
+        }
+        
+        fetch('/api/trocaSenha'  , {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item),
+            credentials: 'include'
+        }).then(response => {
+            console.log(response);
+            history.push('/home');
+        }).catch(error => {
+            console.log(">>ERRO<<", error);
+        });
 
 
 
@@ -84,12 +99,6 @@ export default function BasicTextFields() {
     function isSenhaValidada() {
         return novaSenha === confirSenha;
     }
-
-    // function validarSenha(){
-    //     if(setConfirSenha === setNovaSenha){
-
-    //     }
-    // }
 
     return (
         <Container maxWidth="lg" >
