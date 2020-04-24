@@ -53,6 +53,26 @@ export default function BasicTextFields() {
         }
 
     }
+
+    function submit(){
+        // fetch('/api/formMinhaConta' + ((user.id) ? '/' + user.id.toString() : ''), {
+        //     method: (user.id) ? 'PUT' : 'POST',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(user),
+        //     credentials: 'include'
+        // }).then(response => {
+        //     console.log(response);
+        //     history.push('/home');
+        // }).catch(error => {
+        //     console.log(">>ERRO<<", error);
+        // });
+
+
+
+    }
     function handleTrocarSenha(e) {
         setNovaSenha(e.target.value);
     }

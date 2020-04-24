@@ -25,7 +25,7 @@ export default function ChartBarProduto(props) {
             <Bar
                 data={data}
                 width={100}
-                height={150}
+                height={200}
                 options={{
                     maintainAspectRatio: false
                 }}

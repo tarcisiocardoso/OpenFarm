@@ -1,6 +1,7 @@
 # OpenFarm
 
-Projeto open farm para ajudar produtores e agricultores nos projetos relacionados a agropecuária
+Projeto open farm para ajudar produtores, agricultores e estudantes nos projetos relacionados a agropecuária.
+O Objetivo do sistema consistem fazer simulação da produção com a maior quantidade possível de dados da microrregião, antecipando problemas e subsidiando a tomada de decisão.
 
 ## Configurar o ambiente
 

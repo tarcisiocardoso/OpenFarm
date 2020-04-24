@@ -4,8 +4,8 @@ import { HorizontalBar } from 'react-chartjs-2';
 
 export default function ChartBarHorizontal(props) {
 
-  const { titulo, dados, labels, label } = props;
-  const options = {
+  const { titulo, dados, labels, label, monetario } = props;
+  const optionsMonetario = {
     maintainAspectRatio: false,
     responsive: false,
     legend: {
@@ -14,15 +14,45 @@ export default function ChartBarHorizontal(props) {
       //   boxWidth: 10
       // }
     },
+    scales: {
+      xAxes: [{
+          ticks: {
+              beginAtZero:true,
+              callback: function(value, index, values) {
+                  return value.toLocaleString('pt-br', {minimumFractionDigits: 2});
+              }
+          }
+      }]
+    },
     tooltips: {
-      enabled: true
+      enabled: true,
+      callbacks: {
+        label: function(tooltipItem, chart){
+            // var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+            // return datasetLabel + ': $ ' + tooltipItem.yLabel;
+            return "R$: "+tooltipItem.xLabel.toLocaleString('pt-br', {minimumFractionDigits: 2})
+        }
+      }
+    },
+    onClick: (e, item) => {
+      e.stopPropagation();
+    }
+  }
+  const options = {
+    title: {
+      display: true,
+      text: {titulo}
+    },
+    maintainAspectRatio: false,
+    responsive: false,
+    legend: {
+      position: 'top',
     },
     onClick: (e, item) => {
       // console.log(`Item with text ${item[0]._index} and index ${item[0]._datasetIndex} clicked`);
       e.stopPropagation();
     }
   }
-
   const data = {
     labels: labels,
     datasets: [
@@ -40,8 +70,12 @@ export default function ChartBarHorizontal(props) {
 
   return (
     <div>
-      <h2>{titulo}</h2>
-      <HorizontalBar data={data} options={options} width={500}/>
+      <HorizontalBar 
+      data={data} 
+      options={monetario?optionsMonetario:options} 
+      width={500}
+      height={220}
+      />
     </div>
   );
 }
