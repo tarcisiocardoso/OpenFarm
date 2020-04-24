@@ -31,12 +31,24 @@ export default function CheckboxesGroup() {
         adm: false
     });
 
+
+    const { fazenda, estudante, tecnico, colaborador, adm } = state;
+    // const error = [fazenda, estudante, tecnico, colaborador, adm].filter((v) => v).length === 0;
+    const [profile, loading] = useCurrentUser();
+    useEffect(()=>{
+        if( profile){
+            let st = {...state};
+            st.fazenda = !!profile.perfis.find(el => el === 'fazenda');
+            st.estudante = !!profile.perfis.find(el => el === 'estudante');
+            st.tecnico = !!profile.perfis.find(el => el === 'tecnico');
+            st.colaborador = !!profile.perfis.find(el => el === 'colaborador');
+            st.adm = !!profile.perfis.find(el => el === 'adm');
+            setState(st);
+        }
+    },[profile] );
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
-
-    const { fazenda, estudante, tecnico, colaborador, adm } = state;
-    const error = [fazenda, estudante, tecnico, colaborador, adm].filter((v) => v).length === 0;
 
     return (
         <Container maxWidth="sm">
@@ -44,9 +56,9 @@ export default function CheckboxesGroup() {
                 <Grid container className={classes.root} spacing={3}>
                     <Grid item xs={12}>
                         <br/><br/><br/>
-                    <FormControl required error={error} component="fieldset" className={classes.formControl}>
+                    <FormControl required component="fieldset" className={classes.formControl}>
                     <FormLabel component="legend">Acesso ao sistema</FormLabel>
-                        <FormGroup required error={error}>
+                        <FormGroup required >
                             <FormControlLabel
                                 control={<Checkbox checked={fazenda} onChange={handleChange} name="fazenda" />}
                                 label="Fazenda"
