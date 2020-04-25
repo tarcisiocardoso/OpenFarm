@@ -66,7 +66,17 @@ function PiquetePanel(props) {
             const cv = document.getElementById("canvas");
             const base = Math.sqrt(producao.dados.producao.areaProducaoEmHE)*100;//em metros
             return (base * px)/cv.height;
-        }
+        }, 
+        basePx:function(mt){
+            const cv = document.getElementById("canvas");
+            const base = Math.sqrt(producao.dados.producao.areaProducaoEmHE)*100;//em metros
+            return (cv.width * mt)/base;
+        },
+        alturaPx: function(mt){
+            const cv = document.getElementById("canvas");
+            const base = Math.sqrt(producao.dados.producao.areaProducaoEmHE)*100;//em metros
+            return (cv.height * mt)/base;
+        }, 
     }
 
     useEffect(() => {
@@ -157,13 +167,9 @@ function PiquetePanel(props) {
         
     }
     const handleMouseUp=(e)=>{
-
         indexPiqueteOver = mouseDentroPiquete(mouse);
-        // console.log('>>>handleMouseUp<<<' );
-        
         if( indexPiqueteOver>=0 && resize.fg){
             let p = piquetes[indexPiqueteOver];
-            // console.log('>>>handleMouseUp', resize, mouse, indexPiqueteOver, p );
             if(resize.fim){
                 if( p.x+p.w > mouse.x){
                     p.w = p.w - Math.abs( p.w+p.x - mouse.x);
@@ -171,10 +177,6 @@ function PiquetePanel(props) {
                     p.w = p.w + Math.abs( p.w+p.x - mouse.x);
                 }
             }else{
-                
-                // p.x = mouse.x;
-                // p.w = p.w - (mouse.x - p.w);
-                
                 if( p.x < mouse.x){
                     p.w = p.w - (mouse.x - p.x);
                 }else{
@@ -182,28 +184,34 @@ function PiquetePanel(props) {
                 }
                 p.x = mouse.x;
             }
-            console.log(p);
+            console.log('====>', p);
             setPiqueteEdit(p);
         } 
         drag=false;
         resize.fg = false;
     }
+    function atualizaPiquete(p){
+        console.log('>>>atualizaPiquete<<<');
+
+        let pq = piquetes[indexPiqueteClick];
+        pq.w = dimensalBase.basePx(p.w);
+        
+        setPiqueteEdit(pq);
+    }
     const handleClick=(e)=>{
-        // e.preventDefault();
-        // e.stopPropagation();
-        console.log('>>>handleClick<<<', piquetes[indexPiqueteOver] );
+        e.preventDefault();
+        e.stopPropagation();
         const canvas = ref.current;
 
         var mouse = getMousePos(canvas, e);
-        let clickAnterior = indexPiqueteClick;
+        // let clickAnterior = indexPiqueteClick;
         indexPiqueteClick = mouseDentroPiquete(mouse);
-        // if( clickAnterior == indexPiqueteClick ){
-        //     // indexPiqueteClick = -1;
-        //     // setPiqueteEdit();
-        // }
-        // console.log('>>>handleClick<<<', indexPiqueteClick, piquetes[indexPiqueteOver]);
 
-        setPiqueteEdit({...piquetes[indexPiqueteOver]});
+        if( indexPiqueteClick < 0){
+            setPiqueteEdit();
+        }else{
+            setPiqueteEdit({...piquetes[indexPiqueteClick]});
+        }
     }
     const handleMouseLeave =(e)=>{
         indexPiqueteOver=-1;
@@ -440,7 +448,7 @@ function PiquetePanel(props) {
                             <PiqueteDimensaoForm 
                                 piquete={piqueteEdit} 
                                 producao={producao}
-                                setPiquete={setPiqueteEdit}
+                                setPiquete={atualizaPiquete}
                                 dimensalBase={dimensalBase}
                                 dividirVertical={dividirVertical}
                                 dividirHorizontal={dividirHorizontal}

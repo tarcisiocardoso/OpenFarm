@@ -55,7 +55,7 @@ export default function PiqueteForm(props) {
             <Box>
                 {/* <FormControl className={classes.formControl}> */}
                 <InputLabel htmlFor="age-native-simple">Tolerancia Frio/Seca</InputLabel>
-                <Select
+                {/* <Select
                     fullWidth
                     // value={state.age}
                     // onChange={handleChange}
@@ -68,7 +68,7 @@ export default function PiqueteForm(props) {
                     <option value={10}>Boa</option>
                     <option value={20}>Média</option>
                     <option value={30}>Baixa</option>
-                </Select>
+                </Select> */}
                 {/* </FormControl> */}
             </Box>
         </div>

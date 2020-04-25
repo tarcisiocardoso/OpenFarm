@@ -38,14 +38,27 @@ export default function PiqueteDimensaoForm(props) {
     const handleClickH = () => {
         dividirHorizontal();
     }
+    const handleOnChange=(e) =>{
+        console.log( e.target.name, e.target.value );
+        console.log( piquete );
+
+        let p = {...piquete};
+        if( e.target.name === 'base' ){
+            p.w = parseInt(e.target.value) ;
+            setBase(p.w);
+        }
+        setPiquete(p);
+    }
     return (
         <Grid container spacing={3} >
             <Grid item xs={12}>
             <TextField
                 id="base"
+                name='base'
                 label="Number"
                 type="number"
                 value={base}
+                onChange={handleOnChange}
                 InputProps={{
                     endAdornment: <InputAdornment position="end">m</InputAdornment>,
                 }}
