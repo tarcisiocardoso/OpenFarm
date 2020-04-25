@@ -15,8 +15,8 @@ import ProducaoWizard from './components/user/producao/ProducaoWizard';
 import VerPost from './components/post/VerPost';
 import PainelControle from './components/user/dashBoard/PainelControle';
 import Producao from './components/prod/Producao';
+import TrocarSenha from './components/user/producao/TrocarSenha'
 import Perfil from './components/user/Perfil';
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -42,9 +42,9 @@ function App() {
           <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route> 
           <Route path="/minhaConta"><FormMinhaConta/></Route>
           <Route path="/chart"> <ProfileList/></Route>
+          <Route path="/trocarSenha"> <TrocarSenha/></Route>
           <Route path="/Perfil"><Perfil/></Route>
-          
-          
+         
           <Route path="/blog"><BlogEditor/></Route>
           <Route path="/manutProducao/nova"><CadastroProducao/></Route>
           <Route path="/manutProducao/edit/:id" render={(props)=> <CadastroProducao {...props} />} />

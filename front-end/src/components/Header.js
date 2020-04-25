@@ -226,6 +226,16 @@ export default function Header(props) {
   }
  
 
+  const handleTrocaSenha = () => {
+    handleMenuClose();
+    history.replace("/trocarSenha");
+
+    // props.history.push("/about");
+    //if( !state.open ) handleMenuClose();
+  }
+
+  
+
   const handleLogout = () => {
     console.log('>>>handleLogout<<<');
     localStorage.removeItem(ACCESS_TOKEN);
@@ -268,6 +278,8 @@ export default function Header(props) {
           <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
           <MenuItem onClick={handleCriarUmaConta}>Minha conta</MenuItem>
           <MenuItem onClick={handleLogout}>Sair</MenuItem>
+          <MenuItem onClick={handleTrocaSenha}>Trocar senha</MenuItem>
+
         </div>
       )
     } else {
