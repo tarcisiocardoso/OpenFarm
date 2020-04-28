@@ -257,6 +257,7 @@ export default function Header(props) {
     history.push("/post/"+post.idPost);
     handleMenuClose();
   }
+  
 
   const handleMobileMenuOpen = event => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -275,7 +276,7 @@ export default function Header(props) {
     if (profile && profile.id) {
       return (
         <div>
-          <MenuItem onClick={handleMenuClose}>Perfil</MenuItem>
+          <MenuItem onClick={handlePerfil}>Perfil</MenuItem>
           <MenuItem onClick={handleCriarUmaConta}>Minha conta</MenuItem>
           <MenuItem onClick={handleLogout}>Sair</MenuItem>
           <MenuItem onClick={handleTrocaSenha}>Trocar senha</MenuItem>

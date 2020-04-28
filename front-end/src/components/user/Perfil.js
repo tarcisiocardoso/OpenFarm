@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, InputLabel, Input, FormHelperText, Container, Button, FormLabel, FormGroup, Grid, FormControlLabel, Checkbox, Typography } from '@material-ui/core';
 import {useHistory} from "react-router-dom";
 import { useCurrentUser } from "../../server/UseCurrentUser";
+import { ContactlessOutlined } from '@material-ui/icons';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,36 +25,93 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CheckboxesGroup() {
     const classes = useStyles();
+    const history = useHistory();
+    const [error, setError]= useState({
+        res: false,
+        msg: ""
+
+    });
     const [state, setState] = React.useState({
         fazenda: false,
         estudante: false,
         tecnico: false,
         colaborador: false,
         adm: false
-    });
+    });    
 
 
     const { fazenda, estudante, tecnico, colaborador, adm } = state;
     // const error = [fazenda, estudante, tecnico, colaborador, adm].filter((v) => v).length === 0;
-    const [profile, loading] = useCurrentUser();
+    const [usuario, loading] = useCurrentUser();
+
+
     useEffect(()=>{
-        if( profile){
+
+       
+        if( usuario){
             let st = {...state};
-            st.fazenda = !!profile.perfis.find(el => el === 'fazenda');
-            st.estudante = !!profile.perfis.find(el => el === 'estudante');
-            st.tecnico = !!profile.perfis.find(el => el === 'tecnico');
-            st.colaborador = !!profile.perfis.find(el => el === 'colaborador');
-            st.adm = !!profile.perfis.find(el => el === 'adm');
+            st.fazenda = !!usuario.perfis.find(el => el === 'fazenda');
+            st.estudante = !!usuario.perfis.find(el => el === 'estudante');
+            st.tecnico = !!usuario.perfis.find(el => el === 'tecnico');
+            st.colaborador = !!usuario.perfis.find(el => el === 'colaborador');
+            st.adm = !!usuario.perfis.find(el => el === 'adm');
             setState(st);
         }
-    },[profile] );
+    },[usuario] );  
+
+
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
 
+   function handleSalve(e) {       
+        let arr = [];
+       for(let x in state){
+           
+            if(state[x]){
+                arr.push(x)
+            }
+       }      
+
+       let st = {
+           id:usuario.id,
+           perfis:arr
+       }       
+       e.preventDefault();
+
+        fetch('/api/perfil', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(st),
+            credentials: 'include'
+        }).then(response => {
+            localStorage.removeItem("accessToken_PROFILE");
+            console.log(response);
+            if(response.status !== 200){
+                setError({
+                    res: true,
+                    msg: response.statusText
+
+
+                })
+            }else{
+                history.push('/home');
+            }            
+            
+        }).catch(error => {
+            console.log(">>ERRO<<", error);
+        });
+
+   }
+
+  
+
+
     return (
-        <Container maxWidth="sm">
-            <form  >
+        <Container maxWidth="sm">            
                 <Grid container className={classes.root} spacing={3}>
                     <Grid item xs={12}>
                         <br/><br/><br/>
@@ -83,8 +142,27 @@ export default function CheckboxesGroup() {
                         <FormHelperText>Para apresentar as funcionalidade que terá no sistema</FormHelperText>
                         </FormControl>
                     </Grid>
-                </Grid>
-            </form>
+                    <Grid item xs={12} className={classes.paper} >
+                        <Button variant="outlined" color="primary" onClick={handleSalve} type="submit">
+                            Salvar
+                        </Button>
+                        <Button href="/home" variant="outlined" color="secondary">
+                            Sair
+                        </Button>
+                    </Grid>
+                </Grid>   
+
+                {error.res && 
+                <Alert severity="error">{error.msg}</Alert>
+                
+                
+                
+                }
+                
+                
+                
         </Container>
     );
+
+    
 }

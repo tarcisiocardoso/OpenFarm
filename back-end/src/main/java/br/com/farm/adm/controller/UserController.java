@@ -62,6 +62,17 @@ public class UserController {
         userRepository.insert(user);
     }
 
+    @PostMapping("/api/perfil")
+    public void trocarPerfil(@Valid @RequestBody User user){       
+
+        User u = userRepository.findById(user.getId()).get();
+
+        u.perfis = user.perfis;      
+       
+    
+        userRepository.save(u);
+    }
+
     @PostMapping("/api/trocaSenha")
     public void trocaSenha(@Valid @RequestBody User user){
         System.out.println(">>>>LALALALA<<<<"+ user.getLogin()+user.getPassword());

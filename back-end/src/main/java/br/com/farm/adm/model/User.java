@@ -104,6 +104,6 @@ public class User {
     }
 
     public String toString(){
-        return this.name+"["+this.perfis+"]";
+        return this.name+":["+this.perfis+"]";
     }
 }
