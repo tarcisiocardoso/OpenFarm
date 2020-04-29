@@ -31,7 +31,7 @@ function Home() {
     const [producao, producaoLoading] = useFetch("/api/userProduction/userId/1");
 
     function isPerfilFazendeiro(){
-        return user.perfis.find(item => item === 'fazenda');
+        return user && user.perfis && user.perfis.find(item => item === 'fazenda');
     }
 
     return (

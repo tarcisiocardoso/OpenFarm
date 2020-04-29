@@ -1,6 +1,5 @@
 package br.com.farm.adm.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -11,6 +10,10 @@ import br.com.farm.adm.model.UserProduction;
 public interface UserProductionRepository extends MongoRepository<UserProduction, String> {
 
     @Query(value="{ 'proprietarios' : ?0 }", fields="{ 'identificacao.nome': 1, _id: 1 }")
-	Optional<List<UserProduction>> findByUserId(String id);
+	Optional<UserProduction> findByUserId(String userId);
+
+
+
+
     
 }

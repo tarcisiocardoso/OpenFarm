@@ -42,6 +42,9 @@ export default function CheckboxesGroup() {
         colaborador: false,
         adm: false
     });
+    const [txt, setTxt] = React.useState({
+        titulo:'', descricao:''
+    });
 
 
     const { fazenda, estudante, tecnico, colaborador, adm } = state;
@@ -64,9 +67,17 @@ export default function CheckboxesGroup() {
     const [ openInfo, setOpenInfo] = React.useState(false);
     const [info, infoLoading] = useFetch("/api/info");
 
-    const handleOpenInfo = () => {
+    const handleOpenInfo = (e, info) => {
+        if( !info){
+            setError({
+                res: true,
+                msg:"Ainda não implemntado"
+            })
+            return;
+        }
         setOpenInfo(true);
         setState({...state} );
+        setTxt(info);
     }
 
     const handleChange = (event) => {
@@ -125,7 +136,7 @@ export default function CheckboxesGroup() {
                                     control={<Checkbox checked={fazenda} onChange={handleChange} name="fazenda" />}
                                     label="Fazenda"
                                 />
-                                <IconButton color="primary" aria-label="info" onClick={handleOpenInfo}>
+                                <IconButton color="primary" aria-label="info" onClick={(e)=>handleOpenInfo(e, info.Fazendeiro)}>
                                     <InfoIcon />    
                                 </IconButton>
                             </Grid>
@@ -185,7 +196,7 @@ export default function CheckboxesGroup() {
             } 
 
             { !infoLoading && 
-                <InfoDialog open={openInfo} setOpen={setOpenInfo} info={info.Fazendeiro}/>
+                <InfoDialog open={openInfo} setOpen={setOpenInfo} info={txt}/>
             }
         </Container>
     );
