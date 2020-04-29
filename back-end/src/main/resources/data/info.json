@@ -6,5 +6,9 @@
     "valorUnitario":{
        "titulo":"Valor mínimo e médio de venda",
        "descricao":"Informe o valor praticado em sua região para o sistema poder calcular com mais precisão o lucro."
+    },
+    "Fazendeiro":{
+       "titulo":"testando",
+       "descricao":"testando"
     }
  }
