@@ -67,7 +67,7 @@ const ExpansionPanelDetails = withStyles((theme) => ({
 export default function GastoPanel(props) {
   const {fazenda, setFazenda, commit, isEdit, setEdit } = props;
 
-  const [openInfo, setOpenInfo] = React.useState(false);
+  const [ openInfo, setOpenInfo] = React.useState(false);
   const [expanded, setExpanded] = React.useState({
     panel1:false,
     panel2:true,
@@ -99,7 +99,7 @@ export default function GastoPanel(props) {
         <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
           <Typography >
             Cadastro de gastos fixos da propriedade.
-            <IconButton color="primary" aria-label="info" onClick={ handleOpenInfo}>
+            <IconButton color="primary" aria-label="info" onClick={handleOpenInfo}>
               <InfoIcon />
             </IconButton>
           </Typography>

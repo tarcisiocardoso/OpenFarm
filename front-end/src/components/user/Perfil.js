@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormControl, InputLabel, Input, FormHelperText, Container, Button, FormLabel, FormGroup, Grid, FormControlLabel, Checkbox, Typography } from '@material-ui/core';
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useCurrentUser } from "../../server/UseCurrentUser";
+import { IconButton } from '@material-ui/core';
+import InfoIcon from '@material-ui/icons/Info';
+import InfoDialog from '../../util/InfoDialog';
 import { ContactlessOutlined } from '@material-ui/icons';
 import Alert from '@material-ui/lab/Alert';
+import {useFetch} from '../../server/UseFetch';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CheckboxesGroup() {
+export default function CheckboxesGroup() {    
     const classes = useStyles();
     const history = useHistory();
-    const [error, setError]= useState({
+    const [error, setError] = useState({
         res: false,
         msg: ""
 
@@ -37,19 +41,17 @@ export default function CheckboxesGroup() {
         tecnico: false,
         colaborador: false,
         adm: false
-    });    
+    });
 
 
     const { fazenda, estudante, tecnico, colaborador, adm } = state;
     // const error = [fazenda, estudante, tecnico, colaborador, adm].filter((v) => v).length === 0;
     const [usuario, loading] = useCurrentUser();
 
+    useEffect(() => {
 
-    useEffect(()=>{
-
-       
-        if( usuario){
-            let st = {...state};
+        if (usuario) {
+            let st = { ...state };
             st.fazenda = !!usuario.perfis.find(el => el === 'fazenda');
             st.estudante = !!usuario.perfis.find(el => el === 'estudante');
             st.tecnico = !!usuario.perfis.find(el => el === 'tecnico');
@@ -57,27 +59,34 @@ export default function CheckboxesGroup() {
             st.adm = !!usuario.perfis.find(el => el === 'adm');
             setState(st);
         }
-    },[usuario] );  
+    }, [usuario]);
 
+    const [ openInfo, setOpenInfo] = React.useState(false);
+    const [info, infoLoading] = useFetch("/api/info");
+
+    const handleOpenInfo = () => {
+        setOpenInfo(true);
+        setState({...state} );
+    }
 
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
 
-   function handleSalve(e) {       
+    function handleSalve(e) {
         let arr = [];
-       for(let x in state){
-           
-            if(state[x]){
+        for (let x in state) {
+
+            if (state[x]) {
                 arr.push(x)
             }
-       }      
+        }
 
-       let st = {
-           id:usuario.id,
-           perfis:arr
-       }       
-       e.preventDefault();
+        let st = {
+            id: usuario.id,
+            perfis: arr
+        }
+        e.preventDefault();
 
         fetch('/api/perfil', {
             method: 'POST',
@@ -90,79 +99,96 @@ export default function CheckboxesGroup() {
         }).then(response => {
             localStorage.removeItem("accessToken_PROFILE");
             console.log(response);
-            if(response.status !== 200){
+            if (response.status !== 200) {
                 setError({
                     res: true,
                     msg: response.statusText
-
-
                 })
-            }else{
+            } else {
                 history.push('/home');
-            }            
-            
+            }
         }).catch(error => {
             console.log(">>ERRO<<", error);
         });
-
-   }
-
-  
-
+    }
 
     return (
-        <Container maxWidth="sm">            
-                <Grid container className={classes.root} spacing={3}>
-                    <Grid item xs={12}>
-                        <br/><br/><br/>
+        <Container maxWidth="sm">
+            <Grid container className={classes.root} spacing={3}>
+                <Grid item sm={12}>
+                    <br /><br /><br />
                     <FormControl required component="fieldset" className={classes.formControl}>
-                    <FormLabel component="legend">Acesso ao sistema</FormLabel>
+                        <FormLabel component="legend">Acesso ao sistema</FormLabel>
                         <FormGroup required >
-                            <FormControlLabel
-                                control={<Checkbox checked={fazenda} onChange={handleChange} name="fazenda" />}
-                                label="Fazenda"
-                            />
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    control={<Checkbox checked={fazenda} onChange={handleChange} name="fazenda" />}
+                                    label="Fazenda"
+                                />
+                                <IconButton color="primary" aria-label="info" onClick={handleOpenInfo}>
+                                    <InfoIcon />    
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Checkbox checked={estudante} onChange={handleChange} name="estudante" />}
                                 label="Estudante"
                             />
+                            <IconButton color="primary" aria-label="info" onClick={handleOpenInfo}>
+                                    <InfoIcon />    
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Checkbox checked={tecnico} onChange={handleChange} name="tecnico" />}
                                 label="Tecnico"
                             />
+                            <IconButton color="primary" aria-label="info" onClick={handleOpenInfo}>
+                                    <InfoIcon />    
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Checkbox checked={colaborador} onChange={handleChange} name="colaborador" />}
                                 label="Colaborador"
                             />
+                            <IconButton color="primary" aria-label="info" onClick={handleOpenInfo}>
+                                    <InfoIcon />    
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Checkbox checked={adm} onChange={handleChange} name="adm" />}
                                 label="Administrador"
                             />
+                            <IconButton color="primary" aria-label="info" onClick={handleOpenInfo}>
+                                    <InfoIcon />    
+                                </IconButton>
+                            </Grid>
+
                         </FormGroup>
                         <FormHelperText>Para apresentar as funcionalidade que terá no sistema</FormHelperText>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} className={classes.paper} >
-                        <Button variant="outlined" color="primary" onClick={handleSalve} type="submit">
-                            Salvar
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} className={classes.paper} >
+                    <Button variant="outlined" color="primary" onClick={handleSalve} type="submit">
+                        Salvar
                         </Button>
-                        <Button href="/home" variant="outlined" color="secondary">
-                            Sair
+                    <Button href="/home" variant="outlined" color="secondary">
+                        Sair
                         </Button>
-                    </Grid>
-                </Grid>   
+                </Grid>
+            </Grid>
 
-                {error.res && 
+            {error.res &&
                 <Alert severity="error">{error.msg}</Alert>
-                
-                
-                
-                }
-                
-                
-                
+            } 
+
+            { !infoLoading && 
+                <InfoDialog open={openInfo} setOpen={setOpenInfo} info={info.Fazendeiro}/>
+            }
         </Container>
     );
 
-    
+
 }
