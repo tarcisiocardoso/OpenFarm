@@ -3,7 +3,6 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {Container, Backdrop, CircularProgress} from '@material-ui/core';
 import { useCurrentUser } from "../server/UseCurrentUser";
 import FazendeiroPanel from "./user/home/FazendeiroPanel";
-import { useFetch } from '../server/UseFetch';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -28,7 +27,7 @@ function Home() {
     let [user, loading] = useCurrentUser();
     const classes = useStyles();
 
-    const [producao, producaoLoading] = useFetch("/api/userProduction/userId/1");
+    
 
     function isPerfilFazendeiro(){
         return user && user.perfis && user.perfis.find(item => item === 'fazenda');

@@ -28,7 +28,6 @@ function useFetch(url) {
       url: url, 
       method: 'GET'
     }).then(response => {
-      console.log( response.status);
       if( response.status === 401){
         return {
           erro: true,

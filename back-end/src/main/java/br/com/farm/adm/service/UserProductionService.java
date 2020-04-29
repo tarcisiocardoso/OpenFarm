@@ -1,8 +1,6 @@
 package br.com.farm.adm.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class UserProductionService {
         return repository.findById(id).get();
     }
     
-    public Optional<UserProduction> findByUserId(String userId){
+    public List<UserProduction> findByUserId(String userId){
         return repository.findByUserId(userId);
     }
 

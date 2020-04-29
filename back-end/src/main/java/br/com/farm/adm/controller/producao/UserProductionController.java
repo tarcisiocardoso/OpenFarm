@@ -1,5 +1,7 @@
 package br.com.farm.adm.controller.producao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +25,10 @@ public class UserProductionController {
 
     @RequestMapping(value = "/userId/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<UserProduction> findByUserId(@PathVariable("id") String id) {
-        UserProduction e = service.findByUserId(id).get();
-        HttpStatus status = e != null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        return new ResponseEntity<UserProduction>(e, status);
+    public ResponseEntity<List<UserProduction>> findByUserId(@PathVariable("id") String id) {
+        List<UserProduction> lst = service.findByUserId(id);
+        HttpStatus status = lst != null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return new ResponseEntity<List<UserProduction>>(lst, status);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
