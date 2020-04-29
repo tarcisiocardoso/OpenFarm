@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Redirect } from 'react-router-dom';
-import { useCurrentUser } from "../../../server/UseCurrentUser";
-import { IconButton, Grid, Typography, Backdrop, CircularProgress, Button, Menu, MenuItem } from '@material-ui/core';
+import { IconButton, Grid, Typography, Button, Menu, MenuItem } from '@material-ui/core';
 import PainelControleProducaoPanel from './PainelControleProducaoPanel';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useHistory } from "react-router-dom";

@@ -10,6 +10,7 @@ export default function PiqueteDimensaoForm(props) {
     const [capacidade, setCapacidade] = useState(0);
     const [base, setBase] = useState(0);
     const [altura, setAltura]= useState(0);
+    const [pastoInfo, setPastoInfo] = useState();
     useEffect(() => {
         console.log('>>>PiqueteDimensaoForm<<<', piquete);
         if( piquete && producao ){
@@ -29,8 +30,16 @@ export default function PiqueteDimensaoForm(props) {
             let prod = ((bs*al/10000)*ms); //conversaõ para hectare
             setCapacidade( Math.round(prod/cp));
 
+            let psto = {
+                tempoDescanso: producao.dados.pasto.tempoDescanso,
+                tempoPastejo: [
+                    parseInt(producao.dados.pasto.tempoDescanso[0] / producao.dados.pasto.piquetes),
+                    parseInt(producao.dados.pasto.tempoDescanso[1] / producao.dados.pasto.piquetes)
+                ]
+            }
+            setPastoInfo(psto);
         }
-    }
+    }, [piquete, producao]
     )
     const handleClick = () => {
         dividirVertical();
@@ -41,12 +50,13 @@ export default function PiqueteDimensaoForm(props) {
     const handleOnChange=(e) =>{
         console.log( e.target.name, e.target.value );
         console.log( piquete );
-
         let p = {...piquete};
+        if( !e.target.value ) e.target.value=0;
         if( e.target.name === 'base' ){
             p.w = parseInt(e.target.value) ;
             setBase(p.w);
         }
+        
         setPiquete(p);
     }
     return (
@@ -55,7 +65,7 @@ export default function PiqueteDimensaoForm(props) {
             <TextField
                 id="base"
                 name='base'
-                label="Number"
+                label="Base"
                 type="number"
                 value={base}
                 onChange={handleOnChange}
@@ -81,11 +91,20 @@ export default function PiqueteDimensaoForm(props) {
                 }}
             />
             </Grid>
-            <Grid item xs={12}>
-            <Typography variant="subtitle2" gutterBottom>
-                Capaz de sustentar {producao.dados.producao.qtdAdulto} matrizes em {capacidade} dias
-            </Typography>
-            </Grid>
+            { pastoInfo && 
+                <Grid item xs={12}>
+                <Typography variant="subtitle2" gutterBottom>
+                    O pasto deve ter um tempo de descanso entre {pastoInfo.tempoDescanso[0]} à {pastoInfo.tempoDescanso[1]} dias
+                </Typography>
+                <Typography variant="subtitle2" gutterBottom>
+                    Os animais devem pastar em cada piquete entre {pastoInfo.tempoPastejo[0]} à {pastoInfo.tempoPastejo[1]} dias
+                </Typography>
+                <Typography variant="subtitle2" gutterBottom>
+                    Dessa forma consegue fechar o ciclo produtivo do capim no pico proteico.
+                </Typography>
+
+                </Grid>
+            }
             <Grid item xs={12}>
                 <Button color="primary" onClick={handleClickH}>Dividir piquete na horizontal</Button>
                 <Button color="primary" onClick={handleClick}>Dividir piquete na vertical</Button>

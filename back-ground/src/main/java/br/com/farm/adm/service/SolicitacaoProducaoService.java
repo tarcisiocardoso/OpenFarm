@@ -92,7 +92,7 @@ public class SolicitacaoProducaoService {
     	StringBuilder sb = new StringBuilder();
     	sb.append("<h3>Acompanhe sua producão</h3>")
     	.append("<p>Todas as produções podem ser acompanhada no <a href='/dashboard'>Painel de controle do usuario</a> ou diretamente ")
-    	.append("<a href='/dashboard/").append(prod.id).append("'>na produção criada (").append(prod.nomeProducao).append(")</a></p>");
+    	.append("<a href='/dashboard/").append(prod.id).append("'>na produção (").append(prod.nomeProducao).append(")</a></p>");
     	
     	//TODO definir regra das informações complementares
     	if( true == true) {

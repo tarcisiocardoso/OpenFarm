@@ -204,17 +204,17 @@ function CadastroProducaoPanel(props) {
                         <Input className={classes.espaco}
                             name="valorPVInicial" 
                             type="number"
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>} 
+                            startAdornment={<InputAdornment position="start">R$</InputAdornment>} 
                             onChange={handleChange} 
                             value={campos.valorPVInicial}
                         />
                         <Typography variant="subtitle1" component="span">
-                            a
+                            à
                         </Typography>
-                        <Input 
+                        <Input className={classes.espaco}
                             name="valorPVFinal" 
                             type="number"
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            startAdornment={<InputAdornment position="start">R$</InputAdornment>}
                             onChange={handleChange} value={campos.valorPVFinal}
                         />
                     </Grid>
@@ -227,12 +227,12 @@ function CadastroProducaoPanel(props) {
                         <Typography variant="subtitle1" component="span" className={classes.espaco}>
                             de: 
                         </Typography>
-                            <Input className={classes.espaco} 
-                                name="valorCouroMN" 
-                                type="number"
-                                startAdornment={<InputAdornment position="start">$</InputAdornment>} 
-                                onChange={handleChange} value={campos.valorCouroMN}
-                            />
+                        <Input className={classes.espaco} 
+                            name="valorCouroMN" 
+                            type="number"
+                            startAdornment={<InputAdornment position="start">R$</InputAdornment>} 
+                            onChange={handleChange} value={campos.valorCouroMN}
+                        />
                         <Typography variant="subtitle1" component="span">
                             à
                         </Typography>
@@ -240,7 +240,7 @@ function CadastroProducaoPanel(props) {
                             name="valorCouroMM" 
                             label="Valor maximo" 
                             type="number"
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            startAdornment={<InputAdornment position="start">R$</InputAdornment>}
                             onChange={handleChange} value={campos.valorCouroMM}
                         />
                     </Grid>
@@ -256,7 +256,7 @@ function CadastroProducaoPanel(props) {
                             <Input className={classes.espaco} 
                                 name="valorLaMN" 
                                 type="number"
-                                startAdornment={<InputAdornment position="start">$</InputAdornment>} 
+                                startAdornment={<InputAdornment position="start">R$</InputAdornment>} 
                                 onChange={handleChange} value={campos.valorLaMN}
                             />
                         <Typography variant="subtitle1" component="span">
@@ -266,7 +266,7 @@ function CadastroProducaoPanel(props) {
                             name="valorLaMM" 
                             label="Valor maximo" 
                             type="number"
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            startAdornment={<InputAdornment position="start">R$</InputAdornment>}
                             onChange={handleChange} value={campos.valorLaMM}
                         />
                     </Grid>
@@ -282,7 +282,7 @@ function CadastroProducaoPanel(props) {
                             <Input className={classes.espaco} 
                                 name="valorLeiteMN" 
                                 type="number"
-                                startAdornment={<InputAdornment position="start">$</InputAdornment>} 
+                                startAdornment={<InputAdornment position="start">R$</InputAdornment>} 
                                 onChange={handleChange} value={campos.valorLeiteMN}
                             />
                         <Typography variant="subtitle1" component="span">
@@ -291,7 +291,7 @@ function CadastroProducaoPanel(props) {
                         <Input className={classes.espaco}
                             name="valorLeiteMM" 
                             type="number"
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            startAdornment={<InputAdornment position="start">R$</InputAdornment>}
                             onChange={handleChange} value={campos.valorLeiteMM}
                         />
                     </Grid>
@@ -304,7 +304,7 @@ function CadastroProducaoPanel(props) {
                         <ChartPieProduto labels={menorMaiorLabel} dados={menorMaiorDado} titulo="Direfença dos valores"/>
                     </Grid>
                     <Grid item xs={6}>
-                        <ChartBarProduto labels={labelValor} dados={valor} titulo="Produtos comercialisados"/>
+                        <ChartBarProduto labels={labelValor} dados={valor} titulo="Produtos comercializados"/>
                     </Grid>
                 </Grid>
             </form>

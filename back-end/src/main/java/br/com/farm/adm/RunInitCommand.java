@@ -15,8 +15,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import br.com.farm.adm.model.Fazenda;
+import br.com.farm.adm.model.SistemaProducao;
 import br.com.farm.adm.model.User;
 import br.com.farm.adm.service.FazendaService;
+import br.com.farm.adm.service.SistemaProducaoService;
 import br.com.farm.adm.service.UserService;
 
 @Component
@@ -26,6 +28,10 @@ public class RunInitCommand implements CommandLineRunner {
     FazendaService fazendaService;
     @Autowired
     UserService userService;
+
+    @Autowired
+    SistemaProducaoService sistemaProducaoService;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -41,6 +47,10 @@ public class RunInitCommand implements CommandLineRunner {
         List<Fazenda> lst = fazendaService.findAll();
         System.out.println( lst.size() );
         if( lst.size() == 0 ) populaFarm();
+
+        List<SistemaProducao>lstSistemaProducao = sistemaProducaoService.findAll();
+        System.out.println("-->lstSistemaProducao: " +lstSistemaProducao.size() );
+        if( lstSistemaProducao.size() == 0 ) populaSistemaProducao();
 
         System.out.println( ">>>>FIM<<<<" );
     }
@@ -58,6 +68,12 @@ public class RunInitCommand implements CommandLineRunner {
             user = userService.create(user);
         }
     }
+    private void populaSistemaProducao(){
+        String json = loadRecurso("regraOvino.json");
+        SistemaProducao prod  = g.fromJson(json, SistemaProducao.class);
+        this.sistemaProducaoService.create(prod);
+    }
+
 
     private void populaFarm() {
         
@@ -75,6 +91,7 @@ public class RunInitCommand implements CommandLineRunner {
         System.out.println( farm.identificacao.nome );
         fazendaService.create( farm );
     }
+    
 
     private User getFazendeiro() {
         User user = userService.findByLogin("fazendeiro");

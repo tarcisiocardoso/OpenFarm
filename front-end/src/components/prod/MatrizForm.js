@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
-    FormControlLabel, IconButton, Button, Grid,
-    TextField, FormGroup, Paper, InputLabel
+    IconButton, Button, Grid,
+    TextField, Paper
 } from '@material-ui/core';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { CardHeader } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/Info';
 import InfoDialog from '../../util/InfoDialog';
-import { useHistory, matchPath } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import SearchField from '../../util/SearchField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles((theme) =>
     createStyles({

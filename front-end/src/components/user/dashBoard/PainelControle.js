@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { useLocation, Redirect } from 'react-router-dom';
 import Container from '@material-ui/core/Container';

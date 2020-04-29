@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { useLocation } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
-import { Grid, Typography, 
+import { Grid, Typography, Button,
     ExpansionPanel, 
     ExpansionPanelSummary,
     ExpansionPanelDetails
@@ -44,16 +44,19 @@ let resize = {
 };
 let drag=false;
 let mouse={};
+var mouseClick={};
 
 const FRAMES_PER_SECOND = 10;
 const FRAME_MIN_TIME = (1000/60) * (60 / FRAMES_PER_SECOND) - (1000/60) * 0.5;
 var lastFrameTime = 0;
+let ctrl=false;
 
 function PiquetePanel(props) {
     const classes = useStyles();
     const location = useLocation();
     const ref = useRef(null);
     const [piqueteEdit, setPiqueteEdit] = useState();
+    const [showSave, setShowSave]= useState(false);
     const { producao } = props;
 
     let dimensalBase={
@@ -80,8 +83,6 @@ function PiquetePanel(props) {
     }
 
     useEffect(() => {
-        console.log('>>>PiquetePanel<<<', producao );
-        
         requestAnimationFrame(draw)
     }, [producao]);
 
@@ -109,7 +110,7 @@ function PiquetePanel(props) {
             const p = piquetes[indexPiqueteClick];
             const ctx = ref.current.getContext("2d");
             ctx.beginPath();
-            ctx.rect(p.x, p.y, p.w, p.h);
+            ctx.rect(p.x+2, p.y+2, p.w-2, p.h-2);
             ctx.strokeStyle = "red";
             ctx.lineWidth = "4";
             ctx.stroke();
@@ -120,8 +121,6 @@ function PiquetePanel(props) {
         indexPiqueteOver = mouseDentroPiquete(mouse);
         if( drag && resize.fg && indexPiqueteOver >=0 ){
             const p = piquetes[indexPiqueteOver?indexPiqueteOver:indexPiqueteClick];
-            
-            const canvas = ref.current;
             
             const ctx = ref.current.getContext("2d");
             ctx.beginPath();
@@ -134,13 +133,27 @@ function PiquetePanel(props) {
     }
     function drawMouseOver(){
         const canvas = ref.current;
+        if( drag && !resize.fg){
+            canvas.style.cursor = 'move';
+            if( indexPiqueteClick >= 0 && mouse.x ){
+                let difX =  mouse.x - mouseClick.x;
+                const p = piquetes[indexPiqueteClick];
+                p.x += difX;
+                setPiqueteEdit(p);
+                mouseClick.x = mouse.x;
+            }
+            return;
+        }
         if( indexPiqueteOver >= 0 ){
-            if( indexPiqueteClick === indexPiqueteOver ) return;
             const p = piquetes[indexPiqueteOver];
-            if( !resize.fg) canvas.style.cursor = 'pointer';
+            if( resize.fg){
+                 canvas.style.cursor = 'col-resize';
+            }else{
+                canvas.style.cursor = 'default';   
+            }
             const ctx = ref.current.getContext("2d");
             ctx.beginPath();
-            ctx.rect(p.x, p.y, p.w, p.h);
+            ctx.rect(p.x+1, p.y+1, p.w-1, p.h-1);
             ctx.strokeStyle = "blue";
             ctx.lineWidth = "1";
             ctx.stroke();
@@ -159,17 +172,62 @@ function PiquetePanel(props) {
 
         indexPiqueteOver = mouseDentroPiquete(mouse);
 
-        mouseResize(canvas, mouse);
+        if( drag && resize.fg){
+
+        }else{
+            mouseResize(canvas, mouse);
+        }
     }
+    
     const handleMouseDown=(e)=>{
         drag=true;
-        console.log('>>>handleMouseDown<<<');
-        
+        const canvas = ref.current;
+        getMousePos(canvas, e);
+        mouseClick.x = mouse.x;
     }
+    const handleKeyUp = (e) => {
+        if(e.keyCode === 17){
+            ctrl = false;
+        }
+    }
+    const handleKeyDown=(e) => {
+        if( indexPiqueteOver <0 )return;
+        if(e.keyCode === 17){
+            ctrl = true;
+        }
+        if( e.ctrlKey ){
+            if( e.keyCode === 39){
+                let p = piquetes[indexPiqueteOver];
+                p.w += dimensalBase.basePx(1);
+                setPiqueteEdit({...p});
+            }else if( e.keyCode === 37){
+                let p = piquetes[indexPiqueteOver];
+                p.x += dimensalBase.basePx(-1);
+                p.w += dimensalBase.basePx(1);
+                setPiqueteEdit( {...p} );
+            }
+        }else{
+            if( e.keyCode === 39){
+                let p = piquetes[indexPiqueteOver];
+                p.x += dimensalBase.basePx(1);
+                setPiqueteEdit(p);
+            }else if( e.keyCode === 37){
+                let p = piquetes[indexPiqueteOver];
+                p.x += dimensalBase.basePx(-1);
+                setPiqueteEdit(p);
+            }
+        }
+    }
+    
     const handleMouseUp=(e)=>{
+        if( ctrl ){
+            indexPiqueteOver=-1;
+            indexPiqueteClick=-1;
+            return;
+        }
         indexPiqueteOver = mouseDentroPiquete(mouse);
-        if( indexPiqueteOver>=0 && resize.fg){
-            let p = piquetes[indexPiqueteOver];
+        if( (indexPiqueteOver>=0 || indexPiqueteClick >=0) && resize.fg){
+            let p = piquetes[indexPiqueteOver>=0?indexPiqueteOver:indexPiqueteClick];
             if(resize.fim){
                 if( p.x+p.w > mouse.x){
                     p.w = p.w - Math.abs( p.w+p.x - mouse.x);
@@ -184,19 +242,19 @@ function PiquetePanel(props) {
                 }
                 p.x = mouse.x;
             }
-            console.log('====>', p);
             setPiqueteEdit(p);
         } 
         drag=false;
         resize.fg = false;
     }
     function atualizaPiquete(p){
-        console.log('>>>atualizaPiquete<<<');
-
         let pq = piquetes[indexPiqueteClick];
+        let w = pq.w
         pq.w = dimensalBase.basePx(p.w);
+        pq.x += (w - pq.w)/2;
         
         setPiqueteEdit(pq);
+        setShowSave(true);
     }
     const handleClick=(e)=>{
         e.preventDefault();
@@ -204,7 +262,6 @@ function PiquetePanel(props) {
         const canvas = ref.current;
 
         var mouse = getMousePos(canvas, e);
-        // let clickAnterior = indexPiqueteClick;
         indexPiqueteClick = mouseDentroPiquete(mouse);
 
         if( indexPiqueteClick < 0){
@@ -222,8 +279,6 @@ function PiquetePanel(props) {
         const ctx = ref.current.getContext("2d");
 
         const qtd = producao.dados.pasto.piquetes;
-
-        var matriz = getMatriz(qtd);
 
         //limpa
         ctx.beginPath();
@@ -270,17 +325,14 @@ function PiquetePanel(props) {
         }
     }
     function mouseResize(canvas, mouse){
-        // let index = -1;
-        if( drag && resize.fg) return;
+        
         if( indexPiqueteOver >= 0 ){
             let pq = piquetes[indexPiqueteOver];
             if(mouse.x-5 <= pq.x ){
-                canvas.style.cursor = 'col-resize';
                 resize.fg=true;
                 resize.tp='w';
                 resize.fim=false;
             }else if(mouse.x > (pq.x+pq.w)-5 ){
-                canvas.style.cursor = 'col-resize';
                 resize.fg=true;
                 resize.tp='w';
                 resize.fim=true;
@@ -384,19 +436,29 @@ function PiquetePanel(props) {
         ctx.fillStyle = "green";
         ctx.fill();
     }
+    function handleSalva(){
+        setShowSave(false);
+    }
 
     return (
         <Container maxWidth="xl" >
             <Grid container spacing={3}>
-                <Grid item xs={11}>
+                <Grid item xs={10}>
                     <Typography component="h1" variant="h5" align='center'>
                         Definição de piquetes
                     </Typography>
-                    <Grid item xs={1}>
-                        <Typography variant="caption" display="block" gutterBottom>
-                            <div id="info_debug"></div>
-                        </Typography>
-                    </Grid>
+                </Grid>
+                <Grid item xs={1}>
+                    {   showSave && 
+                        <Button variant="outlined" color="primary" onClick={handleSalva}>
+                            Salvar
+                        </Button>
+                    }
+                </Grid>
+                <Grid item xs={1}>
+                    <Typography variant="caption" display="block" gutterBottom>
+                        <div id="info_debug"></div>
+                    </Typography>
                 </Grid>
 
                 <Grid item xs={8}>
@@ -406,6 +468,7 @@ function PiquetePanel(props) {
                         overflow: 'scroll'
                     }}>
                     <canvas ref={ref} 
+                        tabIndex="0"
                         className={classes.canvas} 
                         id="canvas" 
                         width='800' 
@@ -415,6 +478,8 @@ function PiquetePanel(props) {
                         onClick={handleClick}
                         onMouseDown={handleMouseDown}
                         onMouseUp={handleMouseUp}
+                        onKeyDown={handleKeyDown}
+                        onKeyUp={handleKeyUp}
                         />
                     </div>
                 </Grid>

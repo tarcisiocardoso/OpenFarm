@@ -1,6 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import OvinoList from "./components/OvinoList";
+import Home from './components/Home';
 import Header from "./components/Header";
 import NotFound from './components/common/NotFound';
 import OAuth2RedirectHandler from './components/oauth2/OAuth2RedirectHandler';
@@ -73,18 +72,6 @@ function About() {
 
 function Topics() {
   return <h2>lalalalalal</h2>;
-}
-
-function Home() {
-  return (
-    <center>
-      <OvinoList />
-
-      <Button variant="contained" color="primary">
-        Hello World
-      </Button>
-    </center>
-  )
 }
 
 export default App;

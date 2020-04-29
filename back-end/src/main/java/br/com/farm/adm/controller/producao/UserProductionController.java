@@ -21,6 +21,14 @@ public class UserProductionController {
     @Autowired
     UserProductionService service;
 
+    @RequestMapping(value = "/userId/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<UserProduction> findByUserId(@PathVariable("id") String id) {
+        UserProduction e = service.findByUserId(id).get();
+        HttpStatus status = e != null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return new ResponseEntity<UserProduction>(e, status);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<UserProduction> findById(@PathVariable("id") String id) {

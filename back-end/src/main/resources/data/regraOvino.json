@@ -1,0 +1,37 @@
+{
+    "_id" : ObjectId("5e7bdacc05220a73826b594e"),
+    "nome" : "Ovino",
+    "descricao" : "Produção de ruminantes de pequeno porte, ovinos e caprinos",
+    "ativo" : true,
+    "regras" : [ 
+        {
+            "nome" : "reprodutor",
+            "regra" : "{\n  \"peso\":[45, 160],\n  \"precoce\":[3,9],\n  \"qtdFemeas\":[25,50],\n  \"mortalidade\":[8, 20]\n}"
+        }, 
+        {
+            "nome" : "matriz",
+            "regra" : "{\n  \"peso\":[40, 100],\n   \"intervaloEntreParto\":[6, 12],\n   \"prolificidade\":[1.2, 1.8]\n}"
+        }, 
+        {
+            "nome" : "consumo",
+            "regra" : "{\n   \"UA\":450,\n   \"forragemPC\":{\n      \"normal\":2.5,\n      \"prenha\":3.5,\n      \"comCria\":4.5,\n      \"comGemeos\":8\n   },\n   \"concentrado\":{\n      \"padrao\":[\n         0.3,\n         0.5\n      ],\n      \"gestacao\":[\n         0.3,\n         0.8\n      ],\n      \"lactacao\":[\n         0.4,\n         1\n      ],\n     \"borrego\":[0.1, 0.3],\n\"filhotes\":[0.1, 0.3]\n   },\n   \"exigencia\":{\n      \"normal\":[\n         7,\n         9\n      ],\n      \"gestacao\":[\n         9,\n         12\n      ],\n      \"lactacao\":[\n         14,\n         18\n      ],\n      \"cria\":[\n         16,\n         18\n      ]\n   },\n  \"salMineral\":[10, 50]\n}"
+        }, 
+        {
+            "nome" : "pasto",
+            "regra" : "{\n\"producaoMS\":[12, 15.6],\n\"precipitacao\":[700],\n\"proteina\":[8.5, 12,5],\n\"toleranciaFrioSeca\":[\"media\"],\n\"fertilidadeSolo\":[\"baixa\", \"media\"],\n\"tempoDescanso\":[21, 42],\n\"piquetes\":0,\n\"tamanhoPiquete\":0\n}"
+        }, 
+        {
+            "nome" : "custoProdutivoUnitario",
+            "regra" : "{\n   \"racao\":{\n      \"manutencao\":32,\n      \"gestacao\":36,\n      \"lactacao\":38,\n      \"cordeiro\":41,\n      \"engorda\":36,\n\"greepfeed\":56\n   },\n  \"salMineral\": [35, 50],\n   \"pasto\":{\n      \"formacao\":[\n         1.3,\n         2.5\n      ],\n      \"manutencao\":0.8\n   },\n   \"feno\":[\n      0.50,\n      1.00\n   ],\n   \"silo\":[\n      0.10,\n      0.20\n   ]\n}"
+        }, 
+        {
+            "nome" : "producao",
+            "regra" : "{\n  \"carnePesoVivo\":[5,9],\n  \"leiteLitro\":[1, 3],\n  \"couro\":[1, 50],\n  \"laKg\":[8,12] \n}"
+        }, 
+        {
+            "nome" : "fases",
+            "regra" : "{\n   \"gestacao\":153,\n   \"lactacao\":120,\n   \"rescemNascido\":14,\n   \"recria\":0,\n   \"acabamento\":150\n}"
+        }
+    ],
+    "_class" : "br.com.farm.adm.model.SistemaProducao"
+}
