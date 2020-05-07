@@ -26,10 +26,6 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
 const editar = (e, index)=>{
     console.log('Não implementado...');
 }

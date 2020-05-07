@@ -1,11 +1,7 @@
 import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useFetch } from '../../../server/UseFetch';
+import Calendario from '../../common/Calendario';
 
 
 const useStyles = makeStyles((theme) =>
@@ -21,7 +17,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 export default function FazendeiroPanel(props) {
-  const {user} = props;
+  const {user, setWait} = props;
 
   const classes = useStyles();
 
@@ -29,14 +25,17 @@ export default function FazendeiroPanel(props) {
 
   return (
     <div className={classes.root}>
-      <ExpansionPanel>
+      { !producaoLoading && 
+        <Calendario producao={producao} setWait={setWait} />
+      }
+      {/* <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
 
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
+          <Calendario/>
 
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
@@ -60,7 +59,7 @@ export default function FazendeiroPanel(props) {
             sit amet blandit leo lobortis eget.
           </Typography>
         </ExpansionPanelDetails>
-      </ExpansionPanel>
+      </ExpansionPanel> */}
     </div>
   );
 }

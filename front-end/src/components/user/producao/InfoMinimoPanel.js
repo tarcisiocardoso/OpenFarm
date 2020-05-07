@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { Paper, Select, Container, InputAdornment, Divider, Grid, TextField } from '@material-ui/core';
-import { CardHeader } from '@material-ui/core';
+import { Paper, Container, InputAdornment, Divider, Grid, TextField } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography';
 import ComplementarPanel from './ComplementarPanel';
@@ -13,7 +11,7 @@ var algumAlerta = false;
 export default function InfoMinimoPanel(props) {
 
     const { producao, setDisable, dado, setDado } = props
-    const [erro, setErro] = useState({
+    const [erro] = useState({
         qtd: { erro: false, msg: 11 }
     })
     const [alertas, setAlerta] = useState([]);
@@ -23,9 +21,34 @@ export default function InfoMinimoPanel(props) {
 
     useEffect(() => {
         console.log('>>>>>useEffect do InfoMinimoPanel <<<<', (dado.qtd > 0 && dado.area > 0));
+        function verificaInformacao() {
+            console.log('>>>verificando<<<', dado);
+            if (dado.qtd > 0 && dado.area > 0 && !algumAlerta) { //verifica algum alerta
+                let ua = consumo.UA;
+                let pesoMedio = matriz.peso.length > 1 ? ((matriz.peso[0] + matriz.peso[1]) / 2) : matriz.peso[0];
+                let pTotal = dado.qtd * pesoMedio;
+                let x = (pTotal) / ua;
+                let arr = [];
+                if (x > dado.area) {
+                    algumAlerta = true;
+                    setMsgAbertura("Informações são suficiente para iniciar a produção, alguns ajustes são necessarios que podem ser feito ao longo do processo produtivo");
+                    console.log(x, pTotal);
+                    arr.push("De acordo com a lotação \"animal por hectare\" (UA), considerando um peso médio de " + parseInt(pesoMedio) + " kg a quantidade de animal excede o ideal recomendado.");
+                    setHasComplemento(true);
+                } else if (algumAlerta) {
+                    setMsgAbertura("Producao de " + producao.nome + " com informações suficiente para progredir");
+                }
+                setAlerta(arr);
+            }else if( algumAlerta ){ //ja tem alerta, verifica se resolveu o alerta
+                if( (dado.suplemento && (dado.suplemento.silo || dado.suplemento.feno || dado.suplemento.capineira)) || (dado.piquete && dado.piquete > 0)){
+                    setMsgAbertura("Complemento informado. Apos iniciar o processo assitido, informações e ajustes serão feitos a medida que evolue a produção");
+                    setAlerta([]);
+                }
+            }
+        }
         setDisable(!(dado.qtd > 0 && dado.area > 0));
-        verificaInformacao()
-    }, [dado])
+        verificaInformacao();
+    }, [dado, setDisable, producao])
 
     useEffect(() => {
         console.log('>>>>>useEffect do InfoMinimoPanel (producao)<<<<');
@@ -41,32 +64,9 @@ export default function InfoMinimoPanel(props) {
 
     }, [producao])
 
-    function verificaInformacao() {
-        console.log('>>>verificando<<<', dado);
-        if (dado.qtd > 0 && dado.area > 0 && !algumAlerta) { //verifica algum alerta
-            let ua = consumo.UA;
-            let pesoMedio = matriz.peso.length > 1 ? ((matriz.peso[0] + matriz.peso[1]) / 2) : matriz.peso[0];
-            let pTotal = dado.qtd * pesoMedio;
-            let x = (pTotal) / ua;
-            let arr = [];
-            if (x > dado.area) {
-                algumAlerta = true;
-                setMsgAbertura("Informações são suficiente para iniciar a produção, alguns ajustes são necessarios que podem ser feito ao longo do processo produtivo");
-                console.log(x, pTotal);
-                arr.push("De acordo com a lotação \"animal por hectare\" (UA), considerando um peso médio de " + parseInt(pesoMedio) + " kg a quantidade de animal excede o ideal recomendado.");
-                setHasComplemento(true);
-            } else if (algumAlerta) {
-                setMsgAbertura("Producao de " + producao.nome + " com informações suficiente para progredir");
-            }
-            setAlerta(arr);
-        }else if( algumAlerta ){ //ja tem alerta, verifica se resolveu o alerta
-            if( (dado.suplemento && (dado.suplemento.silo || dado.suplemento.feno || dado.suplemento.capineira)) || (dado.piquete && dado.piquete > 0)){
-                setMsgAbertura("Complemento informado. Apos iniciar o processo assitido, informações e ajustes serão feitos a medida que evolue a produção");
-                setAlerta([]);
-            }
-        }
-    }
+    
     const handleChange = (e) => {
+        console.log('.>>handleChange<<<');
         setDado({ ...dado, [e.target.name]: e.target.value });
         algumAlerta = false;
     }

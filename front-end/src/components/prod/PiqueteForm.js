@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
 import {
-    Box, Button,
-    TextField, Select, InputLabel
+    Box,
+    TextField, InputLabel
 } from '@material-ui/core';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TwoFields from '../../util/TwoFields';
 
 export default function PiqueteForm(props) {
-    const { piquete, dividirVertical, dividirHorizontal } = props;
+    const { piquete } = props;
 
     useEffect(() => {
         console.log('>>>PiqueteForm<<<', piquete);
     }
     )
-    const handleClick = () => {
-        dividirVertical();
-    }
-    const handleClickH = () => {
-        dividirHorizontal();
-    }
+    
     const handlePrecipitacao = (e) => {
         console.log(e);
     }

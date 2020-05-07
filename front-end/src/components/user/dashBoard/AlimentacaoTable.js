@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 });
 
 export default function AlimentacaoTable(props) {
-  const{arrAlimentacao, producao} = props;
+  const{arrAlimentacao} = props;
   const classes = useStyles();
 
   return (

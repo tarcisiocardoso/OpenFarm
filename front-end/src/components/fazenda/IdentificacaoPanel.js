@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    Paper, Grid, FormControl, Input, InputLabel, FormHelperText,
-    Button, Icon, Select, MenuItem, Card, CardContent, Typography, CardHeader,
+    Grid, FormControl, Input, InputLabel, FormHelperText,
+    Select, MenuItem, Card, CardContent, Typography, CardHeader,
     InputAdornment
 } from '@material-ui/core';
 
@@ -35,11 +35,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function IdentificacaoPanel(props) {
     const classes = useStyles();
-    const [error, setError] = useState({
+    const [error] = useState({
         nome: { erro: false, msg: '' },
         descricao: { erro: false, msg: '' },
     })
-    const { fazenda, setFazenda, commit, isEdit, setEdit } = props;
+    const { fazenda, setFazenda, setEdit } = props;
 
     // const [isEdit, setEdit] = useState(false);
 

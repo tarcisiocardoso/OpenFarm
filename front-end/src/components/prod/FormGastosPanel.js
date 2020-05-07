@@ -14,20 +14,15 @@ const useStyles = makeStyles({
     },
 });
 
+let fistTime = true;
 
 
 export default function FormGastosPanel(props) {
     const classes = useStyles();
     const {producao, update} = props;
-    let fistTime = true;
     
     const [valores, setValores] = useState({
         gestacao:{
-            periodo:0,
-            valor:0,
-            qtdRacao:0
-        },
-        lactacao: {
             periodo:0,
             valor:0,
             qtdRacao:0
@@ -89,7 +84,7 @@ export default function FormGastosPanel(props) {
         let acabamento={};
         acabamento.periodo = producao.dados.fases.acabamento;
         acabamento.valor = producao.dados.custoProdutivoUnitario.racao.engorda;
-        acabamento.qtdRacao = (producao.dados.consumo.concentrado.normal[0]+producao.dados.consumo.concentrado.normal[1])/2;
+        acabamento.qtdRacao = (producao.dados.consumo.concentrado.padrao[0]+producao.dados.consumo.concentrado.padrao[1])/2;
 
         setValores({...valores, 
             gestacao:gestacao,
@@ -98,7 +93,8 @@ export default function FormGastosPanel(props) {
             recria: recria,
             acabamento: acabamento
         });
-    }, [producao]);
+    }, [producao, valores]);
+
     const handleGestacaoPeriodo = (e)=>{
         let val = {...valores};
         val.gestacao.periodo = e.target.value
@@ -255,8 +251,8 @@ export default function FormGastosPanel(props) {
         setValores( val );
 
         let prod = {...producao};
-        prod.dados.consumo.concentrado.normal[0] = parseFloat(e.target.value);
-        prod.dados.consumo.concentrado.normal[1] = prod.dados.consumo.concentrado.normal[0];
+        prod.dados.consumo.concentrado.padrao[0] = parseFloat(e.target.value);
+        prod.dados.consumo.concentrado.padrao[1] = prod.dados.consumo.concentrado.padrao[0];
         update(prod);
     }
 

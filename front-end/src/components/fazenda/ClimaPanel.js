@@ -72,7 +72,7 @@ const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abri', 'Maio', 'Junho', 'Julho
 
 export default function ClimaPanel(props) {
   const [expanded, setExpanded] = React.useState('panel1');
-  const {fazenda, setFazenda, commit, isEdit, setEdit } = props;
+  const {fazenda, setFazenda, setEdit } = props;
   
 
   useEffect(() => {

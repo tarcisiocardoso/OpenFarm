@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -58,6 +58,7 @@ export default function FazendaMain() {
   const [isEdit, setEdit] = React.useState(false);
   const [arrFarm, setArrFar] = React.useState();
   const [error, setError] = React.useState();
+  const isFirstRender= useRef(true);
 
   const [fazenda, setFazenda] = React.useState({
     identificacao: {
@@ -76,6 +77,11 @@ export default function FazendaMain() {
         let identificacao = {...fazenda.identificacao, responsavel: profile.name};
         setFazenda({...fazenda, proprietarios:[profile.id], identificacao:identificacao});
         if( !arrFarm){
+          if(isFirstRender.current){
+              isFirstRender.current=false
+          }else{
+              return;
+          }
           fetch('/api/farm/user/'+profile.id)
           .then(response => response.json())
           .then(data => {
@@ -89,7 +95,7 @@ export default function FazendaMain() {
         }
       }
     }
-  });
+  }, [fazenda, arrFarm]);
 
   const buscaFazenda = (id) => {
     fetch('/api/farm/'+id)

@@ -7,7 +7,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 export default function PiqueteDimensaoForm(props) {
     const { piquete, setPiquete, dividirVertical, dividirHorizontal, dimensalBase, producao } = props;
     
-    const [capacidade, setCapacidade] = useState(0);
     const [base, setBase] = useState(0);
     const [altura, setAltura]= useState(0);
     const [pastoInfo, setPastoInfo] = useState();
@@ -20,16 +19,6 @@ export default function PiqueteDimensaoForm(props) {
 
             setAltura( al );
 
-            const animais = producao.dados.producao.qtdAdulto;
-            const peso = (producao.dados.matriz.peso[0]+producao.dados.matriz.peso[1])/2;
-
-            let ms = (producao.dados.pasto.producaoMS[0] + producao.dados.pasto.producaoMS[1])/2;
-            ms = ms*1000/365;//em kg por dia
-            let cp = (animais * peso * 0.03); //3% do peso vivo em to
-
-            let prod = ((bs*al/10000)*ms); //conversaõ para hectare
-            setCapacidade( Math.round(prod/cp));
-
             let psto = {
                 tempoDescanso: producao.dados.pasto.tempoDescanso,
                 tempoPastejo: [
@@ -39,7 +28,7 @@ export default function PiqueteDimensaoForm(props) {
             }
             setPastoInfo(psto);
         }
-    }, [piquete, producao]
+    }, [piquete, producao, dimensalBase]
     )
     const handleClick = () => {
         dividirVertical();

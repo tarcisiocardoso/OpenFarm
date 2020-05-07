@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import { useLocation, Redirect } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Paper, Grid, Typography, IconButton, Button, FormControl, InputLabel, 
+import { Paper, Grid, Typography, IconButton, Button, 
     Input, InputAdornment } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import InfoDialog from '../../util/InfoDialog';
@@ -36,8 +34,6 @@ const useStyles = makeStyles((theme) =>
 
 function CadastroProducaoPanel(props) {
     const classes = useStyles();
-    const location = useLocation();
-    const ref = useRef(null);
     const [labelValor, setLabelValor] = useState(['Leite', 'Carne', 'Couro', 'Lã']);
     const [valor, setValor] = useState([0,0,0]);
     const [campos, setCampos] = useState({
@@ -87,10 +83,37 @@ function CadastroProducaoPanel(props) {
         maior +=    parseFloat(campos.valorLeiteMM? campos.valorLeiteMM: 0);
         maior +=    parseFloat(campos.valorLaMM? campos.valorLaMM: 0);
         maior +=    parseFloat(campos.valorPVFinal? campos.valorPVFinal:0 );
-
-        console.log( menor, maior) ;
+        function mediaLeite(){
+            if( campos.valorLeiteMN && campos.valorLeiteMM ){
+                return (parseFloat(campos.valorLeiteMN ) + parseFloat(campos.valorLeiteMM ))/2;
+            }else{
+                return (campos.valorLeiteMN)?parseFloat(campos.valorLeiteMN ):parseFloat(campos.valorLeiteMM );
+            }
+        }
+        function mediaCarne(){
+            if( campos.valorPVInicial && campos.valorPVFinal ){
+                return (parseFloat(campos.valorPVInicial ) + parseFloat(campos.valorPVFinal ))/2;
+            }else{
+                return (campos.valorPVInicial)?parseFloat(campos.valorPVInicial ):parseFloat(campos.valorPVFinal );
+            }
+        }
+        function mediaCouro(){
+            if( campos.valorCouroMN && campos.valorCouroMM ){
+                return (parseFloat(campos.valorCouroMN ) + parseFloat(campos.valorCouroMM ))/2;
+            }else{
+                return (campos.valorCouroMN)?parseFloat(campos.valorCouroMN ):parseFloat(campos.valorCouroMM );
+            }
+        }
+        function mediaLa(){
+            if( campos.valorLaMN && campos.valorLaMM ){
+                return (parseFloat(campos.valorLaMN ) + parseFloat(campos.valorLaMM ))/2;
+            }else{
+                return (campos.valorLaMN)?parseFloat(campos.valorLaMN ):parseFloat(campos.valorLaMM );
+            }
+        }
+    
         setMenorMaiorDado([menor, maior]);
-        console.log( valor );
+        
         let arr = [];
         let arrLb=[];
         let vl = mediaLeite();
@@ -123,7 +146,6 @@ function CadastroProducaoPanel(props) {
         setHasChange(true);
     }
     const handleSalvaProducao= () => {
-        console.log('.....................')
         setHasChange(false);
         let pro = {...producao} ;
         pro.dados.producao.carnePesoVivo = [parseFloat(campos.valorPVInicial), parseFloat(campos.valorPVFinal) ];
@@ -131,8 +153,6 @@ function CadastroProducaoPanel(props) {
         pro.dados.producao.couro = [parseFloat(campos.valorCouroMN), parseFloat(campos.valorCouroMM) ];
         pro.dados.producao.laKg = [parseFloat(campos.valorLaMN), parseFloat(campos.valorLaMM) ];
         
-        console.log( pro );
-
         fetch('/api/userProduction', {
             method: 'POST',
             headers: {
@@ -145,34 +165,7 @@ function CadastroProducaoPanel(props) {
         .then(data => setProducao ( data ) )
         .catch( error => setError(error));
     }
-    function mediaLa(){
-        if( campos.valorLaMN && campos.valorLaMM ){
-            return (parseFloat(campos.valorLaMN ) + parseFloat(campos.valorLaMM ))/2;
-        }else{
-            return (campos.valorLaMN)?parseFloat(campos.valorLaMN ):parseFloat(campos.valorLaMM );
-        }
-    }
-    function mediaLeite(){
-        if( campos.valorLeiteMN && campos.valorLeiteMM ){
-            return (parseFloat(campos.valorLeiteMN ) + parseFloat(campos.valorLeiteMM ))/2;
-        }else{
-            return (campos.valorLeiteMN)?parseFloat(campos.valorLeiteMN ):parseFloat(campos.valorLeiteMM );
-        }
-    }
-    function mediaCarne(){
-        if( campos.valorPVInicial && campos.valorPVFinal ){
-            return (parseFloat(campos.valorPVInicial ) + parseFloat(campos.valorPVFinal ))/2;
-        }else{
-            return (campos.valorPVInicial)?parseFloat(campos.valorPVInicial ):parseFloat(campos.valorPVFinal );
-        }
-    }
-    function mediaCouro(){
-        if( campos.valorCouroMN && campos.valorCouroMM ){
-            return (parseFloat(campos.valorCouroMN ) + parseFloat(campos.valorCouroMM ))/2;
-        }else{
-            return (campos.valorCouroMN)?parseFloat(campos.valorCouroMN ):parseFloat(campos.valorCouroMM );
-        }
-    }
+    
     return (
         <Container maxWidth="xl" className={classes.root} >
             <Paper>

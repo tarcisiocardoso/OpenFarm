@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
-    Typography, Input, Button, Grid,
-    TextField, FormGroup, Paper, InputLabel
+    Typography, Grid,
+    TextField
 } from '@material-ui/core';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) =>
     createStyles({

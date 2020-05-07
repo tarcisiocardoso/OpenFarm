@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {
-    FormControlLabel, IconButton, Button, Grid,
-    TextField, FormGroup, Paper, InputLabel
+    IconButton, Button, Grid,
+    TextField, Paper
 } from '@material-ui/core';
-import { CardHeader } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/Info';
 import InfoDialog from '../../util/InfoDialog';
 import { useHistory } from "react-router-dom";
 import SearchField from '../../util/SearchField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -45,7 +42,7 @@ const listaDados = [
 function ReprodutorForm(props) {
   
     const classes = useStyles();
-    const { producao, fazenda, updateProducao, setShowConfirm } = props;
+    const { producao, updateProducao } = props;
     const [showInfo, setShowInfo] = useState(false);
     const [showSave, setShowSave] = useState(false);
     const [raca, setRaca] = useState('');
@@ -81,7 +78,6 @@ function ReprodutorForm(props) {
     };
 
     const handleChange = (e) => {
-        let val = e.target.value ? e.target.value : 0;
         console.log(e.target.name+": "+e.target.value);
         setPrecocidade({...precocidade, [e.target.name]: e.target.value} );
         setShowSave(true);

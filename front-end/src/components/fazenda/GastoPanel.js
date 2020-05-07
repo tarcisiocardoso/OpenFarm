@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -26,19 +26,6 @@ const ExpansionPanel = withStyles({
   },
   expanded: {},
 })(MuiExpansionPanel);
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-  },
-  input: {
-    display: 'none',
-  },
-  toRigth: {
-    float: theme.right
-  }
-}));
 
 const ExpansionPanelSummary = withStyles({
   root: {
@@ -65,7 +52,7 @@ const ExpansionPanelDetails = withStyles((theme) => ({
 }))(MuiExpansionPanelDetails);
 
 export default function GastoPanel(props) {
-  const {fazenda, setFazenda, commit, isEdit, setEdit } = props;
+  const {fazenda, setFazenda, setEdit } = props;
 
   const [ openInfo, setOpenInfo] = React.useState(false);
   const [expanded, setExpanded] = React.useState({

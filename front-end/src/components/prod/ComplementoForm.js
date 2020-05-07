@@ -1,26 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { FormControl, FormHelperText, FormControlLabel, IconButton, Button, Grid, 
-    TextField, FormGroup } from '@material-ui/core';
-import { CardHeader } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { IconButton, Grid, 
+    TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/Info';
 import InfoDialog from '../../util/InfoDialog';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-    },
-    formControl: {
-      margin: theme.spacing(3),
-    },
-  }),
-);
 function ComplementoForm(props){
-    const classes = useStyles();
-    const {dados, setDados, salvar} = props;
+    const {dados, setDados} = props;
 
     const [showInfo, setShowInfo] = useState(false);
     

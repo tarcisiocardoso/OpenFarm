@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Grid, Box, IconButton } from '@material-ui/core';
+import { Grid, IconButton } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import InfoDialog from '../../util/InfoDialog';
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-
+let mesInicio=0;
 let recalcula = true;
 export default function ChartCicloProdutivo(props) {
   const classes = useStyles();
@@ -31,8 +31,6 @@ export default function ChartCicloProdutivo(props) {
   const [labels, setLabels] = useState([]);
   const [titulo, setTitulo] = useState('');
 
-  const [ciclo, setCiclo] = useState('mensal');
-  let mesInicio=0;
 
   let infoPiquete = {
     titulo: 'Ciclo Produtivo',
@@ -41,121 +39,117 @@ export default function ChartCicloProdutivo(props) {
   }
 
   useEffect(() => {
-    console.log('>>>chartCicloProdutivo<<<', fazenda, producao);
-
+    function calculoBiMensal(intervalo){
+      const qtdPorCiclo = producao.dados.producao.qtdAdulto / ((producao.dados.matriz.intervaloEntreParto[0] + producao.dados.matriz.intervaloEntreParto[1]) / 2) * intervalo;
+      const faseLactacao = parseInt(producao.dados.fases.lactacao);
+      const prolificidade = (producao.dados.matriz.prolificidade[0] + producao.dados.matriz.prolificidade[1]) / 2;
+      const taxaMortalidade = (producao.dados.reprodutor.mortalidade[0] + producao.dados.reprodutor.mortalidade[1]) / 2;
+      const precocidade = 30 * ((producao.dados.reprodutor.precoce[0] + producao.dados.reprodutor.precoce[1]) / 2);
+      const acabamento = parseInt(producao.dados.fases.acabamento);
+      let init = false;
+  
+      let arrLabel = [];
+      let arrParto = [];
+      let arrFilhotes = [];
+      let arrBorregos = [];
+      let arrTerminacao = [];
+      let qtdCobertura =0;
+      let qtdFilhote=0;
+      let qtdBorrego=0;
+      let qtdTerminacao = 0;
+      let cobertura=[];
+      let filhotes=[];
+      let borrego=[];
+      let terminacao=[];
+      let mes = 0;
+      let tParto=0;
+      for (let x = 0; x < 26; x++) {
+        
+        if( !init ){
+          init = x >= mesInicio;
+          if (!init){ 
+            arrParto.push(0);
+            arrFilhotes.push( 0);
+            arrBorregos.push(0);
+            arrTerminacao.push(0);
+            arrLabel.push(meses[mes]);
+            mes++;
+            tParto+=30;
+            continue;
+          }
+        }
+        if (mes > 11) mes = 0;
+        
+        incrementaTempo(cobertura);
+        incrementaTempo(filhotes);
+        incrementaTempo(borrego);
+        incrementaTempo(terminacao);
+  
+        qtdCobertura=0
+        if( tParto % (30*intervalo) === 0 ){
+          cobertura.push({
+            qtd: parseFloat((qtdPorCiclo).toFixed(2)),
+            tempo:1
+          });
+          qtdCobertura=cobertura[0].qtd;
+        }
+        if( tempoCobertura(cobertura, 150)){
+          let val = cobertura[0].qtd * prolificidade;
+          filhotes.push({
+            qtd: parseFloat( val.toFixed(2)),
+            tempo:1
+          });
+          cobertura.shift();
+        }
+        if (tempoLactacao(filhotes, faseLactacao)) {
+          let val = filhotes[0].qtd;//getTotal(filhotes);
+          val = parseInt(val - (val * (taxaMortalidade/2) / 100));
+          filhotes.shift();
+          borrego.push({
+            qtd: val,
+            tempo:1,
+          });
+        }
+        if( tempoRegrica(borrego, (precocidade - acabamento- faseLactacao)) ){
+          let val = borrego[0].qtd;
+          val = parseInt(val - (val * (taxaMortalidade/2) / 100));
+          terminacao.push({
+            qtd: val,
+            tempo:1
+          })
+          borrego.shift();
+        }
+        if( tempoTerminacao(terminacao, acabamento)){
+          terminacao.shift();
+        }
+        // qtdCobertura     = getTotal( cobertura);
+        qtdFilhote   = getTotal(filhotes);
+        qtdBorrego   = getTotal(borrego);
+        qtdTerminacao= getTotal(terminacao);
+              
+        arrParto.push(parseFloat(qtdCobertura.toFixed(2)));
+        arrFilhotes.push( qtdFilhote);
+        arrBorregos.push(qtdBorrego);
+        arrTerminacao.push(qtdTerminacao);
+        arrLabel.push(meses[mes]);
+        mes++;
+        tParto+=30;
+      }
+      setParto(arrParto);
+      setFilhotes(arrFilhotes);
+      setBorrregos(arrBorregos);
+      setTerminacao(arrTerminacao);
+      setLabels(arrLabel);
+      setTitulo("Ciclo produtivo " + producao.dados.producao.qtdAdulto + " matrizes com " + parseInt(qtdPorCiclo) + " monta a cada "+intervalo+" meses.");
+    }
     if (fazenda && producao && recalcula) {
-      let cicloProdutivo = producao.dados.producao.cicloProdutivo ? producao.dados.producao.cicloProdutivo : 'mensal';
-      mesInicio = producao.dados.producao.mesInicio?producao.dados.producao.mesInicio:0;
-      setCiclo(cicloProdutivo);
+      let cicloProdutivo = producao.dados.producao.cicloProdutivo ? producao.dados.producao.cicloProdutivo : 1;
       calculoBiMensal(cicloProdutivo)
     }
 
-  }, [fazenda, producao]);
+  }, [fazenda, producao, meses]);
 
-  function calculoBiMensal(intervalo){
-    console.log('==================fazendo em intervalos de '+intervalo+' meses calculo mensal===============');
-    const qtdPorCiclo = producao.dados.producao.qtdAdulto / ((producao.dados.matriz.intervaloEntreParto[0] + producao.dados.matriz.intervaloEntreParto[1]) / 2) * intervalo;
-    const faseLactacao = parseInt(producao.dados.fases.lactacao);
-    const prolificidade = (producao.dados.matriz.prolificidade[0] + producao.dados.matriz.prolificidade[1]) / 2;
-    const taxaMortalidade = (producao.dados.reprodutor.mortalidade[0] + producao.dados.reprodutor.mortalidade[1]) / 2;
-    const precocidade = 30 * ((producao.dados.reprodutor.precoce[0] + producao.dados.reprodutor.precoce[1]) / 2);
-    const acabamento = parseInt(producao.dados.fases.acabamento);
-    let init = false;
 
-    let arrLabel = [];
-    let arrParto = [];
-    let arrFilhotes = [];
-    let arrBorregos = [];
-    let arrTerminacao = [];
-    let qtdCobertura =0;
-    let qtdFilhote=0;
-    let qtdBorrego=0;
-    let qtdTerminacao = 0;
-    let cobertura=[];
-    let filhotes=[];
-    let borrego=[];
-    let terminacao=[];
-    let mes = 0;
-    let tParto=0;
-    for (let x = 0; x < 26; x++) {
-      
-      if( !init ){
-        init = x >= mesInicio;
-        if (!init){ 
-          arrParto.push(0);
-          arrFilhotes.push( 0);
-          arrBorregos.push(0);
-          arrTerminacao.push(0);
-          arrLabel.push(meses[mes]);
-          mes++;
-          tParto+=30;
-          continue;
-        }
-      }
-      if (mes > 11) mes = 0;
-      
-      incrementaTempo(cobertura);
-      incrementaTempo(filhotes);
-      incrementaTempo(borrego);
-      incrementaTempo(terminacao);
-
-      qtdCobertura=0
-      if( tParto % (30*intervalo) === 0 ){
-        cobertura.push({
-          qtd: parseFloat((qtdPorCiclo).toFixed(2)),
-          tempo:1
-        });
-        qtdCobertura=cobertura[0].qtd;
-      }
-      if( tempoCobertura(cobertura, 150)){
-        let val = cobertura[0].qtd * prolificidade;
-        filhotes.push({
-          qtd: parseFloat( val.toFixed(2)),
-          tempo:1
-        });
-        cobertura.shift();
-      }
-      if (tempoLactacao(filhotes, faseLactacao)) {
-        let val = filhotes[0].qtd;//getTotal(filhotes);
-        val = parseInt(val - (val * (taxaMortalidade/2) / 100));
-        filhotes.shift();
-        borrego.push({
-          qtd: val,
-          tempo:1,
-        });
-      }
-      if( tempoRegrica(borrego, (precocidade - acabamento- faseLactacao)) ){
-        let val = borrego[0].qtd;
-        val = parseInt(val - (val * (taxaMortalidade/2) / 100));
-        terminacao.push({
-          qtd: val,
-          tempo:1
-        })
-        borrego.shift();
-      }
-      if( tempoTerminacao(terminacao, acabamento)){
-        terminacao.shift();
-      }
-      // qtdCobertura     = getTotal( cobertura);
-      qtdFilhote   = getTotal(filhotes);
-      qtdBorrego   = getTotal(borrego);
-      qtdTerminacao= getTotal(terminacao);
-            
-      arrParto.push(parseFloat(qtdCobertura.toFixed(2)));
-      arrFilhotes.push( qtdFilhote);
-      arrBorregos.push(qtdBorrego);
-      arrTerminacao.push(qtdTerminacao);
-      arrLabel.push(meses[mes]);
-      mes++;
-      tParto+=30;
-    }
-    setParto(arrParto);
-    setFilhotes(arrFilhotes);
-    setBorrregos(arrBorregos);
-    setTerminacao(arrTerminacao);
-    setLabels(arrLabel);
-    setTitulo("Ciclo produtivo " + producao.dados.producao.qtdAdulto + " matrizes com " + parseInt(qtdPorCiclo) + " monta a cada "+intervalo+" meses.");
-  }
   function incrementaTempo(filhotes){
     for(let x in filhotes){
       filhotes[x].tempo +=30;
@@ -252,14 +246,11 @@ export default function ChartCicloProdutivo(props) {
       display: true,
       text: titulo
     },
-    // maintainAspectRatio: true,
-    // responsive: true,
     aspectRatio: 1,
     legend: {
       position: 'top',
     },
     onClick: (e, item) => {
-      // console.log(`Item with text ${item[0]._index} and index ${item[0]._datasetIndex} clicked`);
       e.stopPropagation();
     }
   }

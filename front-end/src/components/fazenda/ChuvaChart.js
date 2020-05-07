@@ -1,9 +1,8 @@
 import React from 'react';
 import {Line} from 'react-chartjs-2';
-import { makeStyles, Container } from '@material-ui/core';
+import {  Container } from '@material-ui/core';
 
 export default function ChuvaChart(props) {
-
     const {meses, matriz} = props;
     const data = {
         labels: meses,

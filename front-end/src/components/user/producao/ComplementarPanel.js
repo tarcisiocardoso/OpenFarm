@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { FormControl, FormHelperText, FormControlLabel, Checkbox, FormLabel, Grid, 
     TextField, FormGroup } from '@material-ui/core';
-import { CardHeader } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -31,8 +29,8 @@ function ComplementarPanel(props){
 
     useEffect(()=>{
         console.log('>>>useEffect complmentar panel<<<<');
-        setDado({...dado, suplemento:suplemento, piquete:qtdPiquete});
-    }, [suplemento, qtdPiquete] );
+        if( !dado) setDado({...dado, suplemento:suplemento, piquete:qtdPiquete});
+    }, [suplemento, qtdPiquete, dado, setDado] );
 
     const handlePiquete =()=>{
         setPiquete(!piquete);

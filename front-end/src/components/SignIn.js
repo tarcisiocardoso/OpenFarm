@@ -16,10 +16,8 @@ import Alert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
-
 import { login } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
-import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -64,7 +62,6 @@ export default function SignIn(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [msgErro, setMsgErro] = React.useState('');
-  const history = useHistory();
   
   const [user, setUser] = React.useState({
     login: '',
@@ -93,7 +90,6 @@ export default function SignIn(props) {
             console.log("You're successfully logged in!");
             // setOpen(false);
             props.onChange(false);
-            // history.push("/home");
             window.location.reload(); 
             
         }).catch(error => {

@@ -15,7 +15,7 @@ export default function MainProducao(props) {
     useEffect(() => {
         console.log('>>>MAINPRODUCAO<<<', fazenda);
         if (fazenda) setDashBoardNome(fazenda.identificacao.nome + " - " + producao.nomeProducao + " - " + producao.dados.producao.qtdAdulto + " matrizes");
-    }, [fazenda]);
+    }, [fazenda, producao]);
 
 
     const handleClick = (event) => {

@@ -41,7 +41,7 @@ export default function ChartBarHorizontal(props) {
   const options = {
     title: {
       display: true,
-      text: {titulo}
+      text: titulo
     },
     maintainAspectRatio: false,
     responsive: false,

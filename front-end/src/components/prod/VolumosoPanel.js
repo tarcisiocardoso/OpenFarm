@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import { useLocation, Redirect } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Paper, Grid, Typography, Backdrop, CircularProgress, IconButton, Button } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import ChartPieProduto from './ChartPieProduto';
 import ComplementoForm from './ComplementoForm';
@@ -34,8 +32,6 @@ let consumoVolumoso = 0.03;
 
 function VolumosoPanel(props) {
     const classes = useStyles();
-    const location = useLocation();
-    const ref = useRef(null);
     const {producao, setProducao, salva} = props;
     const [producaoConsumoAnual, setProducaoConsumoAnual] = useState();
     const [complemento, setComp] = useState();
@@ -52,15 +48,110 @@ function VolumosoPanel(props) {
         console.log("--->VolumosoPanel--<", producao);
 
         const piquete = producao.dados.pasto.piquetes;
-        const silo=producao.dados.complemento.silo;
-        const feno=producao.dados.complemento.feno;
-        const capineira=producao.dados.complemento.capineira;
+        const silo=(producao.dados.complemento && producao.dados.complemento.silo)?producao.dados.complemento.silo:0;
+        const feno=(producao.dados.complemento && producao.dados.complemento.feno)?producao.dados.complemento.feno:0;
+        const capineira=(producao.dados.complemento && producao.dados.complemento.capineira)?producao.dados.complemento.capineira:0;
         setComp({
             piquete: piquete?piquete:0,
             silo: silo?silo:0,
             feno: feno?feno:0,
             capineira:capineira?capineira:0
         });
+        function decrementaDevidoComplementacao(complemento){
+            let result = 0;
+            if( complemento && complemento > 0 ){ // decrementa devido a suplementacao
+                let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+                result = complemento/(pesoMedio * 0.03);
+            }
+            return result;
+        }
+        function calculoComplemento(){
+            const silo = decrementaDevidoComplementacao( (producao.dados.complemento && producao.dados.complemento.silo)?producao.dados.complemento.silo:0);
+            const feno = decrementaDevidoComplementacao( (producao.dados.complemento && producao.dados.complemento.feno)?producao.dados.complemento.feno:0);
+
+            let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+            let capineira = (producao.dados.complemento && producao.dados.complemento.capineira)? producao.dados.complemento.capineira:0;
+            if( capineira > 0 ){
+                capineira = (capineira * 1000)/365 * (pesoMedio * 0.03);
+            }
+            setDadosComplemento([parseInt(silo), parseInt(feno), parseInt(capineira) ]);
+            return {
+                silo: silo,
+                feno: feno,
+                capineira: capineira
+            }
+        }
+        function calculoComPiquete(){
+            let pastoMS = producao.dados.pasto.producaoMS;
+            let area = producao.dados.producao.areaProducaoEmHE;
+            let qtdAdulto = producao.dados.producao.qtdAdulto;
+            let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+            
+            if( (producao.dados.reprodutor.precoce[0]+producao.dados.reprodutor.precoce[1])/2 >=9 ){
+                consumoVolumoso = 0.045;
+            }
+    
+            let producaoTotal = pastoMS[0];
+            // TODO erificar piquetes
+            producaoTotal = producaoTotal * area;
+    
+            const cpl = calculoComplemento()
+            //qtdAdulto -= (cpl.silo+cpl.feno+cpl.capineira);
+            if( cpl.capineira > 0 ){
+                producaoTotal += producao.dados.complemento.capineira;
+            }
+            qtdAdulto -= (cpl.silo+cpl.feno);
+    
+            let consumoDiario = ((qtdAdulto * pesoMedio) * consumoVolumoso);//1000;// 3%
+            let consumo = (consumoDiario * 365)/1000;//consumo anual em tonelada
+    
+            setProducaoConsumoAnual( [consumo, producaoTotal] );
+            setLabel(['Consumo', 'Produção']);
+            setTituloChart("Consumo vs Produção em Toneladas")
+            
+            let dif = producaoTotal - consumo;
+            if( dif > 1){
+                let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+                let consumoBaseAno = (pesoMedio * consumoVolumoso)*360/1000;
+                let qtd = dif / consumoBaseAno;
+                setInfoMsg("Sua produção supera o consumo em "+ parseInt(dif)+" tonelada ha/ano podendo ter um acrescimo de animais adulto em "+parseInt(qtd)+" cabeças.");
+                setAlertaMsg();
+            }else if( dif < -1){
+                setAlertaMsg("Sua produção não supre a necessidade de volumos dos animais adulto, sendo necessario um complemento de "+ parseInt(Math.abs( dif) )+" tonelada ha/ano em feno, silagem ou capineira");
+                setInfoMsg();
+            }else{
+                setAlertaMsg();
+                setInfoMsg();
+            }
+        }
+        function calculoComUA(){
+            let UA = producao.dados.consumo.UA;
+            let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
+            let qtdAdulto = producao.dados.producao.qtdAdulto;
+            const cpl = calculoComplemento()
+            qtdAdulto -= (cpl.silo+cpl.feno+cpl.capineira);
+    
+            let area = producao.dados.producao.areaProducaoEmHE;
+    
+            let suporte = (UA /pesoMedio) * area; 
+    
+            console.log( suporte );
+            setLabel(['Capacidade', 'Qtd de adulto']);
+            setProducaoConsumoAnual( [suporte, qtdAdulto] );
+            setTituloChart("Taxa de lotação animal");
+    
+            let dif = parseInt( suporte - qtdAdulto);
+            if( dif > 1 ){
+                setInfoMsg("A taxa de lotação animais tendo uma UA com "+UA+" kg permite um acrescimo de "+dif+" animais");
+                setAlertaMsg();
+            }else if( dif < -1) {
+                setInfoMsg();
+                setAlertaMsg("Taxa de lotação animal considerando uma UA de "+UA+"kg ultrapassa o limite em "+ Math.abs( dif)+" animais adultos.");
+            }else{
+                setInfoMsg();
+                setAlertaMsg("Taxa de lotação animal considerando uma UA de "+UA+"kg ultrapassa o limite em "+ Math.abs( dif)+" animais adultos.");
+            }
+        }
 
         if( piquete && piquete > 2){
            calculoComPiquete(); 
@@ -69,6 +160,7 @@ function VolumosoPanel(props) {
         }
         
     }, [producao]);
+
     const setComplemento=(c)=>{
         console.log('complemento', c);
         setComp(c);
@@ -81,106 +173,9 @@ function VolumosoPanel(props) {
         }
 
         setProducao({...producao, dados:{...producao.dados, 'complemento':{silo:c.silo, feno:c.feno, capineira:c.capineira}, 
-            pasto:{...producao.dados.pasto, ['piquetes']:piquete} }});
+            pasto:{...producao.dados.pasto, piquetes:piquete} }});
     }
 
-    function calculoComPiquete(){
-        let pastoMS = producao.dados.pasto.producaoMS;
-        let area = producao.dados.producao.areaProducaoEmHE;
-        let qtdAdulto = producao.dados.producao.qtdAdulto;
-        let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
-        
-        if( (producao.dados.reprodutor.precoce[0]+producao.dados.reprodutor.precoce[1])/2 >=9 ){
-            consumoVolumoso = 0.045;
-        }
-
-        let producaoTotal = pastoMS[0];
-        // TODO erificar piquetes
-        producaoTotal = producaoTotal * area;
-
-        const cpl = calculoComplemento()
-        //qtdAdulto -= (cpl.silo+cpl.feno+cpl.capineira);
-        if( cpl.capineira > 0 ){
-            producaoTotal += producao.dados.complemento.capineira;
-        }
-        qtdAdulto -= (cpl.silo+cpl.feno);
-
-        let consumoDiario = ((qtdAdulto * pesoMedio) * consumoVolumoso);//1000;// 3%
-        let consumo = (consumoDiario * 365)/1000;//consumo anual em tonelada
-
-        setProducaoConsumoAnual( [consumo, producaoTotal] );
-        setLabel(['Consumo', 'Produção']);
-        setTituloChart("Consumo vs Produção em Toneladas")
-        
-        let dif = producaoTotal - consumo;
-        if( dif > 1){
-            let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
-            let consumoBaseAno = (pesoMedio * consumoVolumoso)*360/1000;
-            let qtd = dif / consumoBaseAno;
-            setInfoMsg("Sua produção supera o consumo em "+ parseInt(dif)+" tonelada ha/ano podendo ter um acrescimo de animais adulto em "+parseInt(qtd)+" cabeças.");
-            setAlertaMsg();
-        }else if( dif < -1){
-            setAlertaMsg("Sua produção não supre a necessidade de volumos dos animais adulto, sendo necessario um complemento de "+ parseInt(Math.abs( dif) )+" tonelada ha/ano em feno, silagem ou capineira");
-            setInfoMsg();
-        }else{
-            setAlertaMsg();
-            setInfoMsg();
-        }
-    }
-    function calculoComUA(){
-        let UA = producao.dados.consumo.UA;
-        let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
-        let qtdAdulto = producao.dados.producao.qtdAdulto;
-        const cpl = calculoComplemento()
-        qtdAdulto -= (cpl.silo+cpl.feno+cpl.capineira);
-
-        let area = producao.dados.producao.areaProducaoEmHE;
-
-        let suporte = (UA /pesoMedio) * area; 
-
-        console.log( suporte );
-        setLabel(['Capacidade', 'Qtd de adulto']);
-        setProducaoConsumoAnual( [suporte, qtdAdulto] );
-        setTituloChart("Taxa de lotação animal");
-
-        let dif = parseInt( suporte - qtdAdulto);
-        if( dif > 1 ){
-            setInfoMsg("A taxa de lotação animais tendo uma UA com "+UA+" kg permite um acrescimo de "+dif+" animais");
-            setAlertaMsg();
-        }else if( dif < -1) {
-            setInfoMsg();
-            setAlertaMsg("Taxa de lotação animal considerando uma UA de "+UA+"kg ultrapassa o limite em "+ Math.abs( dif)+" animais adultos.");
-        }else{
-            setInfoMsg();
-            setAlertaMsg("Taxa de lotação animal considerando uma UA de "+UA+"kg ultrapassa o limite em "+ Math.abs( dif)+" animais adultos.");
-        }
-    }
-    function calculoComplemento(){
-        const silo = decrementaDevidoComplementacao(producao.dados.complemento.silo);
-        const feno = decrementaDevidoComplementacao(producao.dados.complemento.feno);
-        let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
-        let capineira = producao.dados.complemento.capineira?producao.dados.complemento.capineira:0;
-        if( capineira > 0 ){
-            capineira = (capineira * 1000)/365 * (pesoMedio * 0.03);
-        }
-        setDadosComplemento([parseInt(silo), parseInt(feno), parseInt(capineira) ]);
-        return {
-            silo: silo,
-            feno: feno,
-            capineira: capineira
-        }
-    }
-    
-    function decrementaDevidoComplementacao(complemento){
-        let result = 0;
-        if( complemento && complemento > 0 ){ // decrementa devido a suplementacao
-            let pesoMedio = (producao.dados.matriz.peso[0] + producao.dados.matriz.peso[1])/2;
-            result = complemento/(pesoMedio * 0.03);
-
-            console.log(complemento, "xxxxxxxxxxxxxxxx", result)
-        }
-        return result;
-    }
     const handleSave = (e)=> {
         setShowSalvar(false);
         salva( producao );

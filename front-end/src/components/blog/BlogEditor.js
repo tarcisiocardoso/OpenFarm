@@ -56,7 +56,7 @@ function BlogEditor () {
         setDescCat();
         setDescInfo();
 
-        var ret = blogCategori.find(f => f.id == blog['assunto']);
+        var ret = blogCategori.find(f => f.id === blog['assunto']);
         console.log( ret );
         if( ret ){
             setDescInfo( ret.dc);
@@ -71,7 +71,7 @@ function BlogEditor () {
         setCat(event.target.value);
         setBlog(blog);
 
-        var ret = blogSubCategori.find(f => f.id == blog['categoria']);
+        var ret = blogSubCategori.find(f => f.id === blog['categoria']);
         console.log( ret );
         if( ret ){
             setDescCat( ret.dc);

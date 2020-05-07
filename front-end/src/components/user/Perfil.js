@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, InputLabel, Input, FormHelperText, Container, Button, FormLabel, FormGroup, Grid, FormControlLabel, Checkbox, Typography } from '@material-ui/core';
+import { FormControl, FormHelperText, Container, Button, FormLabel, FormGroup, Grid, FormControlLabel, Checkbox } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import { useCurrentUser } from "../../server/UseCurrentUser";
 import { IconButton } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import InfoDialog from '../../util/InfoDialog';
-import { ContactlessOutlined } from '@material-ui/icons';
 import Alert from '@material-ui/lab/Alert';
 import {useFetch} from '../../server/UseFetch';
 
@@ -30,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CheckboxesGroup() {    
     const classes = useStyles();
     const history = useHistory();
+    const isFirstRender= useRef(true);
     const [error, setError] = useState({
         res: false,
         msg: ""
@@ -49,11 +49,15 @@ export default function CheckboxesGroup() {
 
     const { fazenda, estudante, tecnico, colaborador, adm } = state;
     // const error = [fazenda, estudante, tecnico, colaborador, adm].filter((v) => v).length === 0;
-    const [usuario, loading] = useCurrentUser();
+    const [usuario] = useCurrentUser();
 
     useEffect(() => {
-
         if (usuario) {
+            if(isFirstRender.current){
+                isFirstRender.current=false
+            }else{
+                return;
+            }
             let st = { ...state };
             st.fazenda = !!usuario.perfis.find(el => el === 'fazenda');
             st.estudante = !!usuario.perfis.find(el => el === 'estudante');
@@ -62,7 +66,7 @@ export default function CheckboxesGroup() {
             st.adm = !!usuario.perfis.find(el => el === 'adm');
             setState(st);
         }
-    }, [usuario]);
+    }, [usuario, state]);
 
     const [ openInfo, setOpenInfo] = React.useState(false);
     const [info, infoLoading] = useFetch("/api/info");

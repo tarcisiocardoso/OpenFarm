@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import {
     Table, Container, Grid, Typography, Button, InputLabel, Input, FormHelperText,
-    FormControl, FilledInput, OutlinedInput, ButtonGroup
+    FormControl, ButtonGroup
 } from '@material-ui/core';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -131,7 +131,7 @@ export default function CadastroProducao(props) {
             console.log(">>add<<", nome, regra);
             try {
                 const json = JSON.parse(regra);
-                if(Object.entries(json).length == 0 ){
+                if(Object.entries(json).length === 0 ){
                     r.regra.erro = true;
                     r.regra.msg = "Regra não pode ser vazia";
                     setErroRegra(r);
@@ -173,11 +173,11 @@ export default function CadastroProducao(props) {
             descricao: { erro: false, msg: "" }
         }
 
-        if (producao.nome.length == 0) {
+        if (producao.nome.length === 0) {
             r.nome.erro = true;
             r.nome.msg = 'Obrigatorio';
         }
-        if (producao.descricao.length == 0) {
+        if (producao.descricao.length === 0) {
             r.descricao.erro = true;
             r.descricao.msg = 'Obrigatorio';
         }
@@ -265,64 +265,6 @@ export default function CadastroProducao(props) {
             </TableContainer>
             <ShowRegrasModal open={showModal} setOpen={setShowModal} title={modalTitle} regra={regra}/>
         </Container>
-    );
-}
-
-function Regras(props) {
-    const classes = useStyles();
-    const { regra, setRegra, erroRegra, handleAdd, handleShow } = props;
-    useEffect(() => {
-        console.log('>>>userEffect - Regras<<<', props.regra );
-    });
-
-    const handleChange = e => {
-        setRegra({...regra, [e.target.name]: e.target.value} );
-    };
-
-    return (
-        <form className={classes.root} noValidate autoComplete="off">
-            <Grid container className={classes.root} spacing={3}>
-                <Grid item xs={12}>
-                    <Typography component="h1" variant="h5">
-                        Regra
-                    </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                    <FormControl error={erroRegra.nome.erro} fullWidth required>
-                        <InputLabel htmlFor="nome">Nome</InputLabel>
-                        <Input
-                            name="nome"
-                            aria-describedby="nome-erro"
-                            value={regra.nome}
-                            onChange={handleChange}
-                        />
-                        <FormHelperText id="nome-erro">{erroRegra.nome.msg}</FormHelperText>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={9}>
-                    <FormControl error={erroRegra.regra.erro} fullWidth required>
-                        <InputLabel htmlFor="regra">Regra</InputLabel>
-                        <Input
-                            name="regra"
-                            aria-describedby="regra-erro"
-                            multiline
-                            rows="10"
-                            value={regra.regra}
-                            onChange={handleChange}
-                        />
-                        <FormHelperText id="regra-erro">{erroRegra.regra.msg}</FormHelperText>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={1} align="left">
-                    <Button color="primary" onClick={handleAdd}>
-                        <Icon color="primary">add_circle</Icon>
-                    </Button>
-                    <Button color="primary" onClick={handleShow}>
-                        <Icon color="primary">pageview</Icon>
-                    </Button>
-                </Grid>
-            </Grid>
-        </form>
     );
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper, Select, MenuItem, FormControl, InputLabel, FormHelperText, Grid } from '@material-ui/core';
 import { CardHeader } from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
@@ -33,7 +33,7 @@ export default function EscolhaProducaoPanel(props) {
   const { listaProducao, setDisable, producao, setProducao, fazenda, arrFarm } = props;
 
   const handleChange = (event) => {
-    console.log('>>>>>>>>>>>>>>>>>>>>..handleChange<<<<<<<<<<<<<<<<<<<<<<,')
+    console.log('>>>>>>>>>>>>>>>>>>>>handleChange<<<<<<<<<<<<<<<<<<<<<<,')
     setProducao(event.target.value);
     setDisable(false);
   };
@@ -77,6 +77,7 @@ export default function EscolhaProducaoPanel(props) {
           }
         </Grid>
         <Grid item xs={6}>
+          { producao && listaProducao && listaProducao.length > 0 &&
           <FormControl>
             <InputLabel id="demo-simple-select-label">Produção</InputLabel>
             <Select
@@ -93,6 +94,7 @@ export default function EscolhaProducaoPanel(props) {
             <FormHelperText id="my-helper-text">Escolha o sistema de produção que será assistido</FormHelperText>
 
           </FormControl>
+          }
         </Grid>
 
       </Grid>

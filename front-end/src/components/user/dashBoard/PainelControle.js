@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import { useLocation, Redirect } from 'react-router-dom';
+import { useLocation} from 'react-router-dom';
 import Container from '@material-ui/core/Container';
-import { useCurrentUser } from "../../../server/UseCurrentUser";
-import { IconButton, Grid, Typography, Backdrop, CircularProgress, Button, Menu, MenuItem } from '@material-ui/core';
+import { Backdrop, CircularProgress } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-import PainelControleProducaoPanel from './PainelControleProducaoPanel';
 import ConfirmDialog from '../../../util/ConfirmDialog';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ReprodutorForm from '../../prod/ReprodutorForm';
 import MatrizForm from '../../prod/MatrizForm';
 import MainProducao from './MainProducao';
 
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     useRouteMatch,
@@ -48,12 +43,8 @@ function PainelControle() {
     const location = useLocation();
     const [producao, setProducao] = useState();
     const [error, setError] = useState();
-    const [path, setPath] = useState();
     const [fazenda, setFazenda] = useState();
-    const [profile, carregando] = useCurrentUser();
     const [showConfirm, setShowConfirm] = useState(false);
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
 
     let match = useRouteMatch();
 
@@ -68,7 +59,6 @@ function PainelControle() {
                     for(i=2; i < arr.length; i++){
                         pathArray.push(arr[i]);
                     }
-                    setPath(pathArray);
                     fetch("/api/userProduction/" + id)
                     .then(response => response.json())
                     .then(data => buscaFazenda(data))
@@ -77,18 +67,11 @@ function PainelControle() {
             }else{
                 setWait(false);
             }
-    }, [producao]);
+    }, [producao, location]);
     
     function updateProducao(prod){
         setProducao( prod );
         setShowSave(true);
-    }
-  
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-    const handleReprodutorForm=()=>{
-        handleClose();
     }
   
     function buscaFazenda(data){
@@ -102,9 +85,6 @@ function PainelControle() {
         .catch(error => setError(error));
     }
 
-    const handleSalva=(e)=>{
-        setShowConfirm(true);
-    }
     function salvaProducao(){
         let prod = {...producao};
         fetch('/api/userProduction', {
@@ -123,7 +103,7 @@ function PainelControle() {
     return (
         <Container maxWidth="xl" className={classes.root} >
             
-            <Backdrop className={classes.backdrop} open={wait || carregando} >
+            <Backdrop className={classes.backdrop} open={wait } >
                 <CircularProgress color="inherit" />
             </Backdrop>
             { error &&  <Alert severity="error">{error}</Alert> }

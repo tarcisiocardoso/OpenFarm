@@ -42,7 +42,7 @@ const listaDados = [
 ]
 export default function MatrizForm(props) {
     const classes = useStyles();
-    const { producao, fazenda, updateProducao, setShowConfirm } = props;
+    const { producao, updateProducao } = props;
     const [showInfo, setShowInfo] = useState(false);
     const [showSave, setShowSave] = useState(false);
     const [matriz, setMatriz] = useState({

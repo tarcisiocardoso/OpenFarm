@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import {Container, Backdrop, CircularProgress} from '@material-ui/core';
 import { useCurrentUser } from "../server/UseCurrentUser";
@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) =>
 function Home() {
     let [user, loading] = useCurrentUser();
     const classes = useStyles();
+    const [wait, setWait] = useState(false);
 
     
 
@@ -40,10 +41,10 @@ function Home() {
         }
   
         { !loading &&
-            isPerfilFazendeiro()?<FazendeiroPanel user={user}/>:<div>Perfil sem tela home</div>
+            isPerfilFazendeiro()?<FazendeiroPanel user={user} setWait={setWait}/>:<div>Perfil sem tela home</div>
         }
 
-      <Backdrop className={classes.backdrop} open={loading}>
+      <Backdrop className={classes.backdrop} open={loading || wait}>
         <CircularProgress color="inherit" />
       </Backdrop>
 

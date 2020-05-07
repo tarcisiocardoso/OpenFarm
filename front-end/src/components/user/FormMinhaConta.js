@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, InputLabel, Input, FormHelperText, Container, Button, FormLabel, FormGroup, Grid, FormControlLabel, Checkbox, Typography, SvgIcon } from '@material-ui/core';
+import { FormControl, InputLabel, Input, FormHelperText, Container, Button, FormLabel, FormGroup, Grid, FormControlLabel, Checkbox, Typography } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import { useCurrentUser } from "../../server/UseCurrentUser";
-import { AccessAlarm, ThreeDRotation } from '@material-ui/icons'
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,20 +21,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-// function HomeIcon(props) {
-
-//     return(
-//         <SvgIcon {...props}>
-//                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-//         </SvgIcon>
-//     )
-// }
-
-
-
 export default function FormMinhaConta() {
     const classes = useStyles();
     const history = useHistory();
+    const isFirstRender= useRef(true);
+
     const [user, setUser] = React.useState({
         name: '',
         email: '',
@@ -50,17 +39,19 @@ export default function FormMinhaConta() {
         colaborador: false,
         adm: false
     });
-    //atualiza a pagina 
-    function refreshPage() {
-        window.location.reload();
-    }
 
     let [profile] = useCurrentUser();
 
     useEffect(() => {
         console.log('AAAAAAAAAA')
         console.log("profile", profile);
+        
         if (profile) {
+            if(isFirstRender.current){
+                isFirstRender.current=false
+            }else{
+                return;
+            }
             if (profile.erro) return;
             user.name = profile.name;
             user.email = profile.email;
@@ -76,7 +67,7 @@ export default function FormMinhaConta() {
             }
             setUser(user);
         }
-    }, [profile]);
+    }, [profile, user, state]);
 
     const handleSubmit = (event) => {
         event.preventDefault();

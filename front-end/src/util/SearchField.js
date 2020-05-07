@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import {InputBase, TextField} from '@material-ui/core';
+import {TextField} from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -63,11 +63,11 @@ export default function SearchField(props) {
       <Autocomplete
             freeSolo
             className={classes.input}
-            id="free-solo-2-demo"
             disableClearable
             options={listaDados.map(option => option)}
             onChange={handleChange}
-            name={name} id={name}
+            name={name} 
+            id={name}
             value={value}
             renderInput={params => (
             <TextField

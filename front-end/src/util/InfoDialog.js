@@ -5,12 +5,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import renderHTML from 'react-render-html';
-
 
 export default function InfoDialog(props) {
 
-    //   const [open, setOpen] = React.useState(false);
     const { open, setOpen, info } = props;
     const [scroll, setScroll] = React.useState('paper');
     const renderHTML = require('react-render-html');

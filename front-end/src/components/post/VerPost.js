@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useRef } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import {CardMedia, Backdrop, CircularProgress} from '@material-ui/core';
+import {Backdrop, CircularProgress} from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -17,7 +17,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Alert from '@material-ui/lab/Alert';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
         'margin-left': '10%',
@@ -76,7 +76,7 @@ export default function VerPost(props) {
                 .catch(error => setError(error));
           }
       }
-  }, [post]);
+  }, [post, error, props]);
 
   return (
     <Card className={classes.root}>

@@ -3,11 +3,10 @@ import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import {MenuItem, Button} from '@material-ui/core';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import CheckIcon from '@material-ui/icons/Check';
 import DoneIcon from '@material-ui/icons/Done';
+
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
@@ -36,18 +35,18 @@ const useStyles = makeStyles((theme) =>
 export default function FormProducaoPanel(props) {
     const classes = useStyles();
     const {producao, update, meses}= props
-    let [ciclo, setCiclo] = React.useState('mensal');
+    let [ciclo, setCiclo] = React.useState(1);
     const [show, setShow] = React.useState(false);
     const [qtd, setQtd] = React.useState(0);
     const [area, setArea]= React.useState(0);
-    let [mesInicio, setMesInicio]= React.useState(0);
+    let [mesInicio, setMesInicio]= React.useState(1);
 
     useEffect(()=>{
         if( producao){
             setQtd( producao.dados.producao.qtdAdulto);
             setArea( producao.dados.producao.areaProducaoEmHE);
-            setCiclo(producao.dados.producao.cicloProdutivo );
-            setMesInicio(producao.dados.producao.mesInicio );
+            setCiclo(producao.dados.producao.cicloProdutivo?producao.dados.producao.cicloProdutivo:1 );
+            setMesInicio(producao.dados.producao.mesInicio?producao.dados.producao.mesInicio:1 );
         }
     }, [producao]);
     const handleChange = (event) => {
@@ -59,6 +58,7 @@ export default function FormProducaoPanel(props) {
          }, 30);
     };
     const handleChangeMes=(e)=>{
+        
         setMesInicio(e.target.value);
         mesInicio = e.target.value;
         setTimeout(function(){ 
@@ -66,7 +66,6 @@ export default function FormProducaoPanel(props) {
          }, 30);
     }
     const handleCheckClick=()=>{
-        console.log('>>>handleCheckClick<<<');
         setShow(false);
         let p = {...producao};
 
@@ -77,13 +76,12 @@ export default function FormProducaoPanel(props) {
         update(p);
     }
     const handleKeyPress=(e)=>{
-        if (e.charCode == 13) {
+        if (e.charCode === 13) {
             handleCheckClick();
         }
 
     }
     const handleQtdChange=(e)=>{
-        console.log('>>>handleQtdChange<<<');
         setShow(true);
         setQtd( e.target.value );
     }

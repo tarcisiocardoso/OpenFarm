@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import { useLocation, Redirect } from 'react-router-dom';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { useLocation } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import { Paper, Grid, Typography, Backdrop, CircularProgress } from '@material-ui/core';
-import { useCurrentUser } from "../../server/UseCurrentUser";
 import Alert from '@material-ui/lab/Alert';
 import PiquetePanel from './PiquetePanel';
 import CadastroProducaoPanel from './CadastroProducaoPanel';
@@ -36,7 +34,6 @@ function Producao() {
     const [producao, setProducao] = useState();
     const [error, setError] = useState();
     const [path, setPath] = useState();
-    let [profile, carregando] = useCurrentUser();
 
     useEffect(() => {
         console.log("--->", location);
@@ -61,7 +58,7 @@ function Producao() {
 
             }
         }
-    }, [producao]);
+    }, [producao, location]);
 
     const salvaProducao=(prod)=>{
         console.log(prod);

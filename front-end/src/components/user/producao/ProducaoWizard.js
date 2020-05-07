@@ -7,7 +7,6 @@ import { Button, Backdrop, CircularProgress, Container, Box, Paper, Typography }
 import { useCurrentUser } from "../../../server/UseCurrentUser";
 import EscolhaProducaoPanel from "./EscolhaProducaoPanel";
 import InfoMinimoPanel from "./InfoMinimoPanel";
-import { useFetch } from '../../../server/UseFetch';
 import ConfirmarPanel from './ConfirmarPanel';
 import Alert from '@material-ui/lab/Alert';
 
@@ -43,10 +42,16 @@ export default function ProducaoWizard() {
   const [error, setError] = React.useState();
   const steps = getSteps();
   let [profile, loading] = useCurrentUser();
-  const [listaProducao, loadingProducao] = useFetch("/api/producao");
+  // const [listaProducao, loadingProducao] = useFetch("/api/producao");
+  const [loadingProducao, setLoadingProducao] = useState(true);
+  const [listaProducao, setListaProducao]= useState([{
+      id: 0,
+      nome: '-'
+    }]
+  );
   const [disable, setDisable] = useState(true);
   const [producao, setProducao] = useState({
-    id: '',
+    id: 0,
     nome: '-'
   });
   const [dado, setDado] = useState({
@@ -55,10 +60,8 @@ export default function ProducaoWizard() {
   });
 
   useEffect(() => {
-    console.log('>>>useEffect ProducaoWizard<<<', producao, fazenda );
-    if( !loading ){
-        let identificacao = {...fazenda.identificacao, responsavel: profile.name};
-        
+    console.log('>>>useEffect ProducaoWizard<<<', profile, fazenda, loading );
+    if( profile ){
         if( !arrFarm && !buscandoFarm){
           buscandoFarm = true;
           fetch('/api/farm/user/'+profile.id)
@@ -77,7 +80,23 @@ export default function ProducaoWizard() {
           .catch(error => setError(error));
         }
     }
-  });
+
+    fetch( '/api/producao')
+          .then(response => response.json())
+          .then(data => {
+              console.log('===========', data );
+              setLoadingProducao(false);
+              let pro = [...listaProducao];
+              data.forEach(item =>{
+                pro.push(item);
+              });
+              console.log('prod>>>>', pro);
+              setListaProducao(pro);
+              
+            })
+          .catch(error => setError(error));
+
+  }, [profile]);
 
   const handleNext = () => {
     console.log('solicitarProducao', activeStep );
@@ -94,7 +113,7 @@ export default function ProducaoWizard() {
   function getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
-        return <EscolhaProducaoPanel setDisable={setDisable} listaProducao={listaProducao} 
+        return listaProducao.length > 1 && <EscolhaProducaoPanel setDisable={setDisable} listaProducao={listaProducao} 
         producao={producao} setProducao={setProducao} 
         fazenda={fazenda} setFazenda={setFazenda}
         arrFarm={arrFarm}
