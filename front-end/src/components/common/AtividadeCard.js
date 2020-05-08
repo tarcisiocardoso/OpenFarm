@@ -65,13 +65,10 @@ export default function AtividadeCard(props) {
     const [anchorEl, setAnchorEl] = useState();
 
     useEffect(() => {
-        // setWait(true);
         let txt = '';
         let qtd = 0;
         for (let item in producao) {
-            // console.log('--->', item, producao, dia, mes);
             let atividades = producao[item].dados.atividades;
-            // console.log('\n', atividades);
             for (let a in atividades) {
                 let at = atividades[a];
                 if( typeof at.tempo !== 'object'){
@@ -82,16 +79,12 @@ export default function AtividadeCard(props) {
                                 qtd++;
                             }
                         }
-                    } else {
-
                     }
                 }else{
-                    if( at.tempo.aCadaDia < 30){
-                        let menosDia = at.tempo.inicio;
-                        if( (dia-menosDia) % at.tempo.aCadaDia === 0 ){
-                            txt += txt.length > 0 ? ", " + at.nome : at.nome;
-                            qtd++;
-                        }
+                    let menosDia = at.tempo.inicio;
+                    if( (dia-menosDia) % at.tempo.aCadaDia === 0 ){
+                        txt += txt.length > 0 ? ", " + at.nome : at.nome;
+                        qtd++;
                     }
                 }
             }

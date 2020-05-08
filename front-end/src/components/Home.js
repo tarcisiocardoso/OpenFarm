@@ -36,14 +36,9 @@ function Home() {
 
     return (
     <Container maxWidth='xl' className={classes.root}>
-        {
-            console.log(user)
-        }
-  
         { !loading &&
             isPerfilFazendeiro()?<FazendeiroPanel user={user} setWait={setWait}/>:<div>Perfil sem tela home</div>
         }
-
       <Backdrop className={classes.backdrop} open={loading || wait}>
         <CircularProgress color="inherit" />
       </Backdrop>
