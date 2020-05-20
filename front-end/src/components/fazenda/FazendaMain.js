@@ -58,7 +58,7 @@ export default function FazendaMain() {
   const [isEdit, setEdit] = React.useState(false);
   const [arrFarm, setArrFar] = React.useState();
   const [error, setError] = React.useState();
-  const isFirstRender= useRef(true);
+  const firstTime = useRef(true);
 
   const [fazenda, setFazenda] = React.useState({
     identificacao: {
@@ -71,17 +71,15 @@ export default function FazendaMain() {
   let [profile, loading] = useCurrentUser();
 
   useEffect(() => {
+    
     console.log('>>>useEffect FazendaMain<<<', profile );
     if( !loading ){
-      if( !fazenda.proprietarios){
+      if( firstTime.current ) {//!fazenda.proprietarios){
         let identificacao = {...fazenda.identificacao, responsavel: profile.name};
         setFazenda({...fazenda, proprietarios:[profile.id], identificacao:identificacao});
         if( !arrFarm){
-          if(isFirstRender.current){
-              isFirstRender.current=false
-          }else{
-              return;
-          }
+          firstTime.current = false;
+          
           fetch('/api/farm/user/'+profile.id)
           .then(response => response.json())
           .then(data => {
@@ -95,7 +93,7 @@ export default function FazendaMain() {
         }
       }
     }
-  }, [fazenda, arrFarm]);
+  });
 
   const buscaFazenda = (id) => {
     fetch('/api/farm/'+id)

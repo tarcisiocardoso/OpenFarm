@@ -31,6 +31,14 @@ public class UserProductionController {
         return new ResponseEntity<List<UserProduction>>(lst, status);
     }
 
+    @RequestMapping(value = "/farmId/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<List<UserProduction>> findByFarmId(@PathVariable("id") String id) {
+        List<UserProduction> lst = service.findByFarmId(id);
+        HttpStatus status = lst != null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return new ResponseEntity<List<UserProduction>>(lst, status);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<UserProduction> findById(@PathVariable("id") String id) {

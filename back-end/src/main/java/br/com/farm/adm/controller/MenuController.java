@@ -43,10 +43,12 @@ public class MenuController{
         user.perfis.forEach((perfil)->{
           if( perfil.equals("fazenda")){
             // lst.add(new Menu("Criar Nova produção", "build", "newProduction" ));
-            // lst.add(new Menu("Painel de controle", "dashboard", "dashboar" ));
+            lst.add(new Menu("Painel de controle", "dashboard", "dashboard" ));
             // lst.add(new Menu("Grafico de produtividade", "show_chart", "chart" ));
             lst.add(new Menu("Fazenda", "home_work", "fazenda"));
             lst.add(new Menu("Nova Produção", "launch_icon", "wizardProducao"));
+
+            lst.add(new Menu("Formulação Ração", "home_work", "racao"));
           }
           if( perfil.equals("adm")){
             lst.add(new Menu("Produção", "build", "manutProducao" ));
