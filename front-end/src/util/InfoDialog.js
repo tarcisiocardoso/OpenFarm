@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 export default function InfoDialog(props) {
 
     const { open, setOpen, info } = props;
-    const [scroll, setScroll] = React.useState('paper');
+    const [scroll] = React.useState('paper');
     const renderHTML = require('react-render-html');
 
     const handleClose = () => {
@@ -47,7 +47,7 @@ export default function InfoDialog(props) {
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
                     OK
-          </Button>
+                </Button>
             </DialogActions>
         </Dialog>
     );

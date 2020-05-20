@@ -1,0 +1,241 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto; 
+    /* background-color: #2196F3; */
+    padding: 10px;
+  }
+  .grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.jaarkalender {
+    float: left;
+    width: 248px;
+    height: 210px;
+    background: url(/images/backfade.png) no-repeat 0px 0px;
+    text-align: center;
+}
+
+
+.calendar td.v2,
+.calendar td.v2:hover {
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #1988D7;
+    background-image: none;
+    cursor: default;
+    padding: 1px;
+    margin: 1px;
+}
+
+.calendar {}
+.calendar td.vandaag,
+.calendar td.vandaag:hover {
+    font-weight: bold;
+    font-size: 15px;
+    color: #fff;
+    background: url(/images/vandaag.png) no-repeat 0px 0px;
+}
+
+.calendar td.vandaag a,
+.calendar td.vandaag:hover a {
+    font-weight: bold;
+    font-size: 15px;
+    color: #fff;
+}
+
+.calendar-month td.vandaag,
+.calendar-month td.vandaag:hover {
+    font-weight: bold;
+    font-size: 20px;
+    color: #fff;
+    background: url(/images/vandaag-month.png) no-repeat 0px 0px;
+}
+
+.calendar-title {
+    color: #ffffff;
+    font-size: 15px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+    text-align: center;
+}
+
+.calendar-title-link,
+.calendar-title-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: dotted 1px #fff;
+    background: url("/images/93.png") no-repeat scroll 0px 0px transparent;
+    padding-left: 20px;
+}
+
+.calendar-title-link:hover {
+    text-decoration: none;
+    border-bottom: solid 2px #fff;
+}
+
+.calendar-month-title {
+    color: #ffffff;
+    font-size: 22px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    text-align: center;
+}
+
+.calendar-month-title-link,
+.calendar-month-title-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.calendar-moon {}
+
+.calendar-moon-title {
+    border-bottom: 1px solid #DFDFDF;
+    color: #ffffff;
+    background-color: #1988D7;
+    font-size: 22px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    text-align: center;
+}
+
+.calendar-moon-title-link,
+.calendar-moon-title-link:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+.calendar-moon th {
+    color: #000;
+    font-size: 12px;
+    text-align: center;
+    border-bottom: #b7b7b7 solid 1px;
+    width: 110px;
+}
+
+.calendar-moon td {
+    font-weight: bold;
+    border-bottom: 1px solid #DFDFDF;
+    padding: 2px;
+}
+
+.calendar-moon .vandaag_moon_calendar {
+    font-weight: bold;
+    color: #fff;
+    background-color: #1988D7;
+}
+
+.calendar .wknr,
+.calendar-month .wknr {
+    color: #a2a2a2;
+    font-style: italic;
+}
+
+.calendar .wknr {
+    width: 36px;
+    font-size: 12px;
+}
+
+.calendar .wknr:hover {
+    background: none;
+}
+
+.calendar-month .wknr {
+    width: 55px;
+}
+
+.calendar-month .wknr:hover {
+    background: none;
+}
+
+.calendar-month th.wknr {
+    font-size: 12px;
+    width: 50px;
+}
+
+.calendar td.emptycells:hover,
+.calendar-month td.emptycells:hover {
+    background: none;
+    cursor: auto;
+}
+
+td.vak {
+    color: #cc234c;
+    font-weight: bold;
+}
+
+td.wd_5,
+td.wd_6 {
+    color: #0d5d9a;
+}
+
+.calendar {}
+
+.calendar-month {
+    width: 370px;
+    height: 250px;
+}
+
+.calendar th,
+.calendar-month th {
+    color: #676767;
+}
+
+.calendar th {
+    font-size: 12px;
+}
+
+.calendar th,
+.calendar-month th,
+.calendar td,
+.calendar-month td {
+    text-align: center;
+    color: #686868;
+}
+
+.calendar-month th {
+    font-size: 12px;
+}
+
+.calendar td {
+    font-size: 14px;
+}
+
+.calendar th,
+.calendar td {
+    width: 30px;
+    line-height: 24px;
+    height: 24px;
+}
+
+.calendar td:hover {
+    font-weight: bold;
+    font-size: 15px;
+    background: url(/images/sel.png) no-repeat 0px 0px;
+    cursor: pointer;
+}
+
+.calendar-month th,
+.calendar-month td {
+    width: 45px;
+    line-height: 36px;
+    height: 36px;
+}
+
+.calendar-month td {
+    font-size: 18px;
+}
+
+.calendar-month td:hover,
+.sun_hover {
+    font-weight: bold;
+    font-size: 20px;
+    background: url(/images/sel-month.png) no-repeat 0px 0px;
+    cursor: pointer;
+}

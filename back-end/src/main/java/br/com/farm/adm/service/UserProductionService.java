@@ -35,4 +35,8 @@ public class UserProductionService {
     public void delete(String id) {
         repository.deleteById(id);
     }
+
+	public List<UserProduction> findByFarmId(String id) {
+		return repository.findByFarmId(id);
+	}
 }

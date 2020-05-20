@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { useFetch } from '../../../server/UseFetch';
-import Calendario from '../../common/Calendario';
+import Calendario from '../../common/calendario/Calendario';
 
 
 const useStyles = makeStyles((theme) =>

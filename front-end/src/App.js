@@ -13,6 +13,7 @@ import FazendaMain from './components/fazenda/FazendaMain';
 import ProducaoWizard from './components/user/producao/ProducaoWizard';
 import VerPost from './components/post/VerPost';
 import PainelControle from './components/user/dashBoard/PainelControle';
+import Racao from './components/user/dashBoard/Racao';
 import Producao from './components/prod/Producao';
 import TrocarSenha from './components/user/producao/TrocarSenha'
 import Perfil from './components/user/Perfil';
@@ -56,6 +57,7 @@ function App() {
           
           <Route path="/dashboard"><PainelControle/></Route>
           <Route path="/prod"><Producao/></Route>
+          <Route path="/racao"><Racao/></Route>
           {/* <React path="/blog"> <BlogEditor/> </React> */}
 
           <Route component={NotFound}></Route> 

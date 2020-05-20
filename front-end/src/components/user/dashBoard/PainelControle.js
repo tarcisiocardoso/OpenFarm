@@ -8,12 +8,13 @@ import ConfirmDialog from '../../../util/ConfirmDialog';
 import ReprodutorForm from '../../prod/ReprodutorForm';
 import MatrizForm from '../../prod/MatrizForm';
 import MainProducao from './MainProducao';
+import { useCurrentUser } from "../../../server/UseCurrentUser";
+import PainelControleFazendeiro from './PainelControleFazendeiro';
 
 import {
     Switch,
     Route,
     useRouteMatch,
-    useParams
   } from "react-router-dom";
 
 
@@ -45,6 +46,7 @@ function PainelControle() {
     const [error, setError] = useState();
     const [fazenda, setFazenda] = useState();
     const [showConfirm, setShowConfirm] = useState(false);
+    let [profile] = useCurrentUser();
 
     let match = useRouteMatch();
 
@@ -98,7 +100,9 @@ function PainelControle() {
         }).then( response => response.json())
         .then(data => setShowSave(false) )
         .catch( error => setError(error));
-        
+    }
+    function isPerfilFazenda(){
+        return profile && profile.perfis.find(item => item === 'fazenda')
     }
     return (
         <Container maxWidth="xl" className={classes.root} >
@@ -116,9 +120,6 @@ function PainelControle() {
                 />
 
             <Switch>
-                <Route path={`${match.path}/prod/:topicId`}>
-                    <Topic />
-                </Route>
                 <Route path={`${match.path}/:id/reprodutor`}>
                     <ReprodutorForm
                         producao={producao} 
@@ -145,7 +146,11 @@ function PainelControle() {
                     />
                 </Route>
                 <Route path={match.path}>
-                    <h1>Não implementado</h1>
+                    { isPerfilFazenda() ? 
+                        <PainelControleFazendeiro user={profile}/>
+                        :
+                        <h2>não implementado</h2>
+                    }
                 </Route>
             </Switch>
 
@@ -156,8 +161,3 @@ function PainelControle() {
         }
         
 export default PainelControle;
-
-function Topic() {
-    let { topicId } = useParams();
-    return <h3>Requested topic ID: {topicId}</h3>;
-  }

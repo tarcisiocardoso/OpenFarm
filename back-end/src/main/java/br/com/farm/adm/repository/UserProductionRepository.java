@@ -12,6 +12,9 @@ public interface UserProductionRepository extends MongoRepository<UserProduction
     @Query(value="{ 'proprietarios' : ?0 }", fields="{}")
 	List<UserProduction> findByUserId(String id);
 
+    @Query(value="{ 'idFazenda' : ?0 }", fields="{}")
+	List<UserProduction> findByFarmId(String id);
+
 
     
 }
